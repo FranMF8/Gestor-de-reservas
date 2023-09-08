@@ -5,7 +5,6 @@
 package view;
 
 import dao.daoBooking;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -19,7 +18,13 @@ import model.Tools.DateHandler;
 public class vBooking extends javax.swing.JFrame {
 
     private daoBooking dao = new daoBooking();
-    private DefaultTableModel model = new DefaultTableModel();
+    private DefaultTableModel model = new DefaultTableModel() {
+        
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return false;
+        }
+    };
     private ArrayList<Booking> lista;
     private int fila = -1;
     private Booking selectedReserva = new Booking();
@@ -38,6 +43,7 @@ public class vBooking extends javax.swing.JFrame {
         DeleteButton.setEnabled(false);
         UpdateButton.setEnabled(false);
         CancelButton.setEnabled(false);
+        this.updateTable();
     }
     
     public void updateTable() {    
