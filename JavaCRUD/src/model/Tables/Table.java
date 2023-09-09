@@ -12,7 +12,7 @@ import model.Tools.DateHandler;
  *
  * @author cejit
  */
-public class Table {
+public class Table implements Comparable<Table> {
     
     private int ID;
     private String state;
@@ -103,6 +103,11 @@ public class Table {
         }
         
         return true;
+    }
+    
+    @Override
+    public int compareTo(Table otherTable) {
+        return Integer.compare(this.quantity, otherTable.getQuantity());
     }
     
 }
