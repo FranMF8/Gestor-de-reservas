@@ -353,6 +353,7 @@ public class vBooking extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Campos vacios.");
                 return;
             }
+            
             Booking reserva = new Booking();
             String nombre = NameTextField.getText();
             String horaString = (String) HourInput.getSelectedItem();
@@ -364,11 +365,12 @@ public class vBooking extends javax.swing.JFrame {
             reserva.SetPersonas(personas);
             
             List<Table> mesasFiltradas = mesas.returnBiggerThan(personas);
+            Collections.sort(mesasFiltradas);
             
             int mesa = this.returnTableID(mesasFiltradas, reserva);
             
             if (mesa == 0) {
-                JOptionPane.showMessageDialog(null, "La reserva no es posible");          
+                JOptionPane.showMessageDialog(null, "La reserva no es posible.");          
                 return;
             }         
             
