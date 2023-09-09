@@ -5,6 +5,7 @@
 package model.Tools.DecisionTree;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -14,61 +15,26 @@ import java.util.List;
 public class BinaryTree<T extends Comparable<T>> {
     
     private TreeNode<T> root;
+    private Comparator<T> comparator;
     
-    public BinaryTree() {
+    public BinaryTree(Comparator<T> comparador) {
         this.root = null;
+        this.comparator = comparador;
     }
     
     private TreeNode<T> insertRecursively(TreeNode<T> node, T value) {
-        
-        /*
-        Base case
-        
-        If the actual node value equals null it means
-        that we are in a free to insert the new value
-        creating a new node and returning it.
-        */       
-        
+
         if (node == null) {
             return new TreeNode<>(value);
         }
-        
-        /*
-        Left recursion case
-        
-        It calls 'insertRecursively' recursively
-        on the left subtree of the current node
-        as the new node and the same value that
-        we want to insert.
-        */
-        
-        if (value.compareTo(node.getValue()) <= 0) {
-            
+
+        if (this.comparator.compare(value, node.getValue()) <= 0) {
             node.setLeft(insertRecursively(node.getLeft(), value));
-            
-        } 
-        
-        /*
-        Right recursion case
-        
-        It calls 'insertRecursively' recursively
-        on the right subtree of the current node
-        as the new node and the same value that we want to insert
-        */
-        
-        else if (value.compareTo(node.getValue()) > 0) {
-            
+        } else {
             node.setRight(insertRecursively(node.getRight(), value));
-            
         }
-        
-        /*
-        Finally, after inserting the new node
-        in the proper place, we return
-        the current node
-        */
-        
-        return node;
+
+    return node;
     }
     
     public void insertNode(T value){
@@ -90,12 +56,15 @@ public class BinaryTree<T extends Comparable<T>> {
         this.returnBiggerThan(node.getLeft(), value, biggerValues);
     }
     
-    public List<T> returnBiggerThan(T value) {
+    public List<T> returnBiggerThan(T value, Comparator<T> comparador) {
         
         List<T> biggerValues = new ArrayList<>();
         this.returnBiggerThan(this.root, value, biggerValues);
         
         return biggerValues;
     }
-    
+    public List<T> returnBiggerThan(T value) {
+        
+        return returnBiggerThan(value, this.comparator);
+    }
 }
