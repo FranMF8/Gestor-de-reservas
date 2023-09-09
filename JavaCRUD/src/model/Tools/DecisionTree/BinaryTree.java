@@ -4,6 +4,9 @@
  */
 package model.Tools.DecisionTree;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author cejit
@@ -69,8 +72,30 @@ public class BinaryTree<T extends Comparable<T>> {
     }
     
     public void insertNode(T value){
+        
         this.root = this.insertRecursively(this.root, value);
     }
     
+    private void returnBiggerThan(TreeNode<T> node, T value, List<T> biggerValues) {
+        if (node == null) {
+            return;
+        }
+        
+        if (node.getValue().compareTo(value) > 0) {
+            biggerValues.add(node.getValue());
+        }
+        
+        this.returnBiggerThan(node.getRight(), value, biggerValues);
+        
+        this.returnBiggerThan(node.getLeft(), value, biggerValues);
+    }
+    
+    public List<T> returnBiggerThan(T value) {
+        
+        List<T> biggerValues = new ArrayList<>();
+        this.returnBiggerThan(this.root, value, biggerValues);
+        
+        return biggerValues;
+    }
     
 }
