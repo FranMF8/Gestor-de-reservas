@@ -7,6 +7,7 @@ package model.Tools.DecisionTree;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import model.Tables.Table;
 
 /**
  *
@@ -42,28 +43,33 @@ public class BinaryTree<T extends Comparable<T>> {
         this.root = this.insertRecursively(this.root, value);
     }
     
-    private void returnBiggerThan(TreeNode<T> node, T value, List<T> biggerValues) {
+    private void returnBiggerThan(TreeNode<T> node, int quantity, List<T> biggerValues) {
         if (node == null) {
             return;
         }
-        
-        if (node.getValue().compareTo(value) > 0) {
-            biggerValues.add(node.getValue());
+
+        this.returnBiggerThan(node.getRight(), quantity, biggerValues);
+
+        if (node.getValue() instanceof Table) {
+            Table table = (Table) node.getValue();
+            if (table.getQuantity() >= quantity) {
+                biggerValues.add(node.getValue());
+            }
         }
-        
-        this.returnBiggerThan(node.getRight(), value, biggerValues);
-        
-        this.returnBiggerThan(node.getLeft(), value, biggerValues);
+
+        this.returnBiggerThan(node.getLeft(), quantity, biggerValues);
     }
+
+
     
-    public List<T> returnBiggerThan(T value, Comparator<T> comparador) {
+    public List<T> returnBiggerThan(int value, Comparator<T> comparador) {
         
         List<T> biggerValues = new ArrayList<>();
         this.returnBiggerThan(this.root, value, biggerValues);
         
         return biggerValues;
     }
-    public List<T> returnBiggerThan(T value) {
+    public List<T> returnBiggerThan(int value) {
         
         return returnBiggerThan(value, this.comparator);
     }

@@ -7,6 +7,7 @@ package view;
 import dao.daoBooking;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -33,12 +34,12 @@ public class vBooking extends javax.swing.JFrame {
     
     
     private void insertTables() {
-        mesas.insertNode(new Table(6, 1));
-        mesas.insertNode(new Table(6, 2));
+        mesas.insertNode(new Table(2, 1));
+        mesas.insertNode(new Table(2, 2));
         mesas.insertNode(new Table(4, 3));
         mesas.insertNode(new Table(4, 4));     
-        mesas.insertNode(new Table(2, 5));
-        mesas.insertNode(new Table(2, 6));
+        mesas.insertNode(new Table(6, 5));
+        mesas.insertNode(new Table(6, 6));
     }
     
     public void cleanInputs() {
@@ -71,7 +72,8 @@ public class vBooking extends javax.swing.JFrame {
         }
         BookingsTable.setModel(model);
     }
-        public void createTableModel() {
+    
+    public void createTableModel() {
         model.addColumn("ID");
         model.addColumn("Nombre");
         model.addColumn("Mesa");
@@ -82,8 +84,6 @@ public class vBooking extends javax.swing.JFrame {
     public int returnTableID(List<Table> mesasFiltradas, Booking r) {
         
         for(Table m: mesasFiltradas) {
-            
-            System.out.println(m.getID());
             if (m.checkTableState(r)) {
                 Table newMesa = m;
                 newMesa.insertBooking(r);
@@ -297,12 +297,12 @@ public class vBooking extends javax.swing.JFrame {
             LocalTime hora = gestor.formatFromString( (String) HourInput.getSelectedItem());
             int personas = (Integer) PeopleInput.getValue();
             
-            List<Table> mesasFiltradas = mesas.returnBiggerThan(new Table(personas, 0));
+            List<Table> mesasFiltradas = mesas.returnBiggerThan(personas);
             
             int mesa = this.returnTableID(mesasFiltradas, selectedReserva);
             
             if (mesa == 0) {
-                JOptionPane.showMessageDialog(null, "ERROR");
+                JOptionPane.showMessageDialog(null, "No fue posible actualizar la reserva");
                 return;
             }
             
@@ -363,17 +363,14 @@ public class vBooking extends javax.swing.JFrame {
             reserva.SetHora(hora);
             reserva.SetPersonas(personas);
             
-            List<Table> mesasFiltradas = mesas.returnBiggerThan(new Table(personas));
+            List<Table> mesasFiltradas = mesas.returnBiggerThan(personas);
             
             int mesa = this.returnTableID(mesasFiltradas, reserva);
             
             if (mesa == 0) {
                 JOptionPane.showMessageDialog(null, "La reserva no es posible");          
                 return;
-            }
-            
-            this.IDOutputLabel.setText(String.valueOf(mesa));
-            
+            }         
             
             reserva.SetMesa(mesa);
             
