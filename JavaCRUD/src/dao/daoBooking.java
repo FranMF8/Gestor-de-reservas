@@ -35,7 +35,7 @@ public class daoBooking {
         try {
             ps = con.Connect().prepareStatement("INSERT INTO Reservas VALUES(null,?,?,?,?)");
             ps.setString(1, reserva.GetNombre());
-            ps.setInt(2, 1);
+            ps.setInt(2, reserva.GetMesa());
             ps.setString(3, gestor.formatFromLDT(reserva.GetHora()));
             ps.setInt(4, reserva.GetPersonas());
             ps.executeUpdate();
@@ -67,11 +67,12 @@ public class daoBooking {
         PreparedStatement ps = null;
         DateHandler gestor = new DateHandler();
         try {
-            ps = con.Connect().prepareStatement("UPDATE Reservas SET Nombre=?, Hora =?, Personas=? WHERE id=?");
-            ps.setString(1, reserva.GetNombre());
-            ps.setString(2, gestor.formatFromLDT(reserva.GetHora()));
-            ps.setInt(3, reserva.GetPersonas());
-            ps.setInt(4, reserva.GetID());
+            ps = con.Connect().prepareStatement("UPDATE Reservas SET Nombre=?, Mesa =?, Hora =?, Personas=? WHERE id=?");
+            ps.setString(1, reserva.GetNombre());       
+            ps.setInt(2, reserva.GetMesa());
+            ps.setString(3, gestor.formatFromLDT(reserva.GetHora()));
+            ps.setInt(4, reserva.GetPersonas());
+            ps.setInt(5, reserva.GetID());        
             ps.executeUpdate();
             con.Disconnect();
             return true;          

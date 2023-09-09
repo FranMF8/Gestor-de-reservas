@@ -19,11 +19,20 @@ public class Table implements Comparable<Table> {
     private int quantity;
     private ArrayList<Booking> bookings;
     
-    public Table(int cantidad) {
+    public Table(int cantidad, int id) {
         
+        this.ID = id;
         this.quantity = cantidad;
         this.bookings = new ArrayList<Booking>();
-        
+        this.state = "Libre";
+    }
+    
+    public Table(int cantidad) {
+       
+        this.ID = 0;
+        this.quantity = cantidad;
+        this.bookings = new ArrayList<Booking>();
+        this.state = "Libre";
     }
     
     ///////////Getters & Setters///////////
@@ -44,8 +53,16 @@ public class Table implements Comparable<Table> {
         return this.state;
     }
     
-    public void setState(String estado) {
-        this.state = estado;
+    public boolean setState(int estado) {
+        if (estado == 0) {
+            this.state = "Libre";
+            return true;
+        } else if (estado == 1) {
+            this.state = "Ocupada";
+            return true;
+        }
+        
+        return false;
     }
     
     ////////////Quantity////////////
@@ -65,6 +82,10 @@ public class Table implements Comparable<Table> {
         }
         
         return false;
+    }
+    
+    public void insertBooking(Booking r) {
+        this.bookings.add(r);
     }
     
     public boolean checkTableState(Booking reserva) {

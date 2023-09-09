@@ -21,6 +21,5 @@ public class Tables {
         this.mesas = new BinaryTree<>(this.quantityComparator);
     }
     
-    
 }
 

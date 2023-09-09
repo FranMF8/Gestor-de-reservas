@@ -67,4 +67,24 @@ public class BinaryTree<T extends Comparable<T>> {
         
         return returnBiggerThan(value, this.comparator);
     }
+    
+    public void replaceNodeValue(T oldValue, T newValue) {
+    this.root = replaceNodeValueRecursively(this.root, oldValue, newValue);
+}
+
+    private TreeNode<T> replaceNodeValueRecursively(TreeNode<T> node, T oldValue, T newValue) {
+        if (node == null) {
+            return null;
+        }
+
+        if (comparator.compare(oldValue, node.getValue()) == 0) {
+            node.setValue(newValue);
+        } else if (comparator.compare(oldValue, node.getValue()) < 0) {
+            node.setLeft(replaceNodeValueRecursively(node.getLeft(), oldValue, newValue));
+        } else {
+            node.setRight(replaceNodeValueRecursively(node.getRight(), oldValue, newValue));
+        }
+
+        return node;
+    }
 }

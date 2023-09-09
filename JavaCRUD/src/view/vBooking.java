@@ -5,11 +5,16 @@
 package view;
 
 import dao.daoBooking;
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.Booking;
+import model.Tables.Table;
 import model.Tools.DateHandler;
+import model.Tools.DecisionTree.BinaryTree;
 
 /**
  *
@@ -17,22 +22,24 @@ import model.Tools.DateHandler;
  */
 public class vBooking extends javax.swing.JFrame {
 
-    private daoBooking dao = new daoBooking();
-    private DefaultTableModel model = new DefaultTableModel() {
-        
-        @Override
-        public boolean isCellEditable(int row, int column) {
-            return false;
-        }
-    };
+    private daoBooking dao;
     private ArrayList<Booking> lista;
     private int fila = -1;
-    private Booking selectedReserva = new Booking();
-    private DateHandler gestor = new DateHandler();
+    private Booking selectedReserva;
+    private DateHandler gestor;
+    private Comparator<Table> comparador;
+    private BinaryTree<Table> mesas;
+    private DefaultTableModel model;
     
-    /**
-     * Creates new form vBooking
-     */
+    
+    private void insertTables() {
+        mesas.insertNode(new Table(6, 1));
+        mesas.insertNode(new Table(6, 2));
+        mesas.insertNode(new Table(4, 3));
+        mesas.insertNode(new Table(4, 4));     
+        mesas.insertNode(new Table(2, 5));
+        mesas.insertNode(new Table(2, 6));
+    }
     
     public void cleanInputs() {
         NameTextField.setText("");
@@ -64,19 +71,59 @@ public class vBooking extends javax.swing.JFrame {
         }
         BookingsTable.setModel(model);
     }
-    
-    
-    public vBooking() {
-        initComponents();
-        setLocationRelativeTo(null);
-        setTitle("Gestor de Reservas");
+        public void createTableModel() {
         model.addColumn("ID");
         model.addColumn("Nombre");
         model.addColumn("Mesa");
         model.addColumn("Hora");
         model.addColumn("Personas");
+    }
+    
+    public int returnTableID(List<Table> mesasFiltradas, Booking r) {
+        
+        for(Table m: mesasFiltradas) {
+            
+            System.out.println(m.getID());
+            if (m.checkTableState(r)) {
+                Table newMesa = m;
+                newMesa.insertBooking(r);
+                mesas.replaceNodeValue(m, newMesa);
+                return m.getID();
+            }
+        }
+        
+        return 0;
+    }
+    
+    
+    /**
+     * Creates new form vBooking
+     */
+    
+    public vBooking() {
+        initComponents();
+        
+        this.dao = new daoBooking();
+        this.selectedReserva = new Booking();
+        this.gestor = new DateHandler();
+        this.comparador = Comparator.naturalOrder();
+        this.mesas = new BinaryTree<Table>(this.comparador);
+        this.model = new DefaultTableModel() {
+        
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        
+        setLocationRelativeTo(null);
+        setTitle("Gestor de Reservas");
+        
+        
+        this.createTableModel();
         this.updateTable();
         this.cleanInputs();
+        this.insertTables();
     }
 
     @SuppressWarnings("unchecked")
@@ -239,17 +286,30 @@ public class vBooking extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void UpdateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateButtonActionPerformed
-        
-        
+              
         try {
             if (NameTextField.getText().equals("")) {
                 JOptionPane.showMessageDialog(null, "Campos vacios.");
                 return;
             }
             
-            selectedReserva.SetNombre(NameTextField.getText());
-            selectedReserva.SetHora(gestor.formatFromString( (String) HourInput.getSelectedItem()));
-            selectedReserva.SetPersonas((Integer) PeopleInput.getValue());
+            String nombre = NameTextField.getText();
+            LocalTime hora = gestor.formatFromString( (String) HourInput.getSelectedItem());
+            int personas = (Integer) PeopleInput.getValue();
+            
+            List<Table> mesasFiltradas = mesas.returnBiggerThan(new Table(personas, 0));
+            
+            int mesa = this.returnTableID(mesasFiltradas, selectedReserva);
+            
+            if (mesa == 0) {
+                JOptionPane.showMessageDialog(null, "ERROR");
+                return;
+            }
+            
+            selectedReserva.SetNombre(nombre);
+            selectedReserva.SetHora(hora);
+            selectedReserva.SetPersonas(personas);
+            selectedReserva.SetMesa(mesa);
             
             if (dao.updateBooking(this.selectedReserva)) {
                 this.updateTable();
@@ -294,9 +354,28 @@ public class vBooking extends javax.swing.JFrame {
                 return;
             }
             Booking reserva = new Booking();
-            reserva.SetNombre(NameTextField.getText());
-            reserva.SetHora(gestor.formatFromString( (String) HourInput.getSelectedItem()));
-            reserva.SetPersonas((Integer) PeopleInput.getValue());
+            String nombre = NameTextField.getText();
+            String horaString = (String) HourInput.getSelectedItem();
+            LocalTime hora = gestor.formatFromString(horaString);
+            int personas = (Integer) PeopleInput.getValue();
+            
+            reserva.SetNombre(nombre);
+            reserva.SetHora(hora);
+            reserva.SetPersonas(personas);
+            
+            List<Table> mesasFiltradas = mesas.returnBiggerThan(new Table(personas));
+            
+            int mesa = this.returnTableID(mesasFiltradas, reserva);
+            
+            if (mesa == 0) {
+                JOptionPane.showMessageDialog(null, "La reserva no es posible");          
+                return;
+            }
+            
+            this.IDOutputLabel.setText(String.valueOf(mesa));
+            
+            
+            reserva.SetMesa(mesa);
             
             if (dao.insertBooking(reserva)) {
                 this.updateTable();
@@ -304,9 +383,10 @@ public class vBooking extends javax.swing.JFrame {
             }
         } catch(Exception e) {
             JOptionPane.showMessageDialog(null, "ERROR");
+            e.printStackTrace();
         }
         
-        this.cleanInputs();
+        
     }//GEN-LAST:event_AddButtonActionPerformed
 
     private void CancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelButtonActionPerformed
