@@ -84,25 +84,25 @@ public class Table {
             boolean reservaGuardadaEnPunto = this.equalsZero(rMinutes);
             
             if ( (reservaEnPunto && reservaGuardadaEnPunto) || (!reservaEnPunto && !reservaGuardadaEnPunto)) {               
-                if (hour - 1 != rHour && hour + 1 != rHour && hour != rHour) {
-                    return true;
+                if (hour - 1 == rHour || hour + 1 == rHour || hour == rHour) {
+                    return false;
                 }             
             }
             
             if (reservaEnPunto && !reservaGuardadaEnPunto) {
-                if (hour - 2 != rHour && hour - 1 != rHour && hour + 1 != rHour && hour != rHour) {
-                    return true;
+                if (hour - 2 == rHour || hour - 1 == rHour || hour + 1 == rHour || hour == rHour) {
+                    return false;
                 }      
             }
             
             if (!reservaEnPunto && reservaGuardadaEnPunto) {
-                if (hour - 1 != rHour && hour + 1 != rHour && hour + 2 != rHour && hour != rHour) {
-                    return true;
+                if (hour - 1 == rHour || hour + 1 == rHour || hour + 2 == rHour || hour == rHour) {
+                    return false;
                 }      
             }
         }
         
-        return false;
+        return true;
     }
     
 }
