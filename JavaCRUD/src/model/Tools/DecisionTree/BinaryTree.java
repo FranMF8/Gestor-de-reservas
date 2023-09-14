@@ -35,7 +35,7 @@ public class BinaryTree<T extends Comparable<T>> {
             node.setRight(insertRecursively(node.getRight(), value));
         }
 
-    return node;
+        return node;
     }
     
     public void insertNode(T value){
@@ -59,8 +59,6 @@ public class BinaryTree<T extends Comparable<T>> {
 
         this.returnBiggerThan(node.getLeft(), quantity, biggerValues);
     }
-
-
     
     public List<T> returnBiggerThan(int value, Comparator<T> comparador) {
         
@@ -75,8 +73,8 @@ public class BinaryTree<T extends Comparable<T>> {
     }
     
     public void replaceNodeValue(T oldValue, T newValue) {
-    this.root = replaceNodeValueRecursively(this.root, oldValue, newValue);
-}
+        this.root = replaceNodeValueRecursively(this.root, oldValue, newValue);
+    }
 
     private TreeNode<T> replaceNodeValueRecursively(TreeNode<T> node, T oldValue, T newValue) {
         if (node == null) {
@@ -85,10 +83,6 @@ public class BinaryTree<T extends Comparable<T>> {
 
         if (comparator.compare(oldValue, node.getValue()) == 0) {
             node.setValue(newValue);
-        } else if (comparator.compare(oldValue, node.getValue()) < 0) {
-            node.setLeft(replaceNodeValueRecursively(node.getLeft(), oldValue, newValue));
-        } else {
-            node.setRight(replaceNodeValueRecursively(node.getRight(), oldValue, newValue));
         }
 
         return node;

@@ -31,6 +31,7 @@ public class vBooking extends javax.swing.JFrame {
     private Comparator<Table> comparador;
     private BinaryTree<Table> mesas;
     private DefaultTableModel model;
+    private List<Table> mesasFiltradas;
     
     
     private void insertTables() {
@@ -84,11 +85,15 @@ public class vBooking extends javax.swing.JFrame {
     public int returnTableID(List<Table> mesasFiltradas, Booking r) {
         
         for(Table m: mesasFiltradas) {
+            
+            System.out.println(m.getID());
+            Table newMesa = m;
             if (m.checkTableState(r)) {
-                Table newMesa = m;
+                
                 newMesa.insertBooking(r);
                 mesas.replaceNodeValue(m, newMesa);
-                return m.getID();
+                this.mesasFiltradas = mesas.returnBiggerThan(r.GetPersonas());
+                return newMesa.getID();
             }
         }
         
@@ -108,7 +113,9 @@ public class vBooking extends javax.swing.JFrame {
         this.gestor = new DateHandler();
         this.comparador = Comparator.naturalOrder();
         this.mesas = new BinaryTree<Table>(this.comparador);
+        this.mesasFiltradas = new ArrayList<Table>();
         this.model = new DefaultTableModel() {
+            
         
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -297,7 +304,7 @@ public class vBooking extends javax.swing.JFrame {
             LocalTime hora = gestor.formatFromString( (String) HourInput.getSelectedItem());
             int personas = (Integer) PeopleInput.getValue();
             
-            List<Table> mesasFiltradas = mesas.returnBiggerThan(personas);
+            this.mesasFiltradas = mesas.returnBiggerThan(personas);
             
             int mesa = this.returnTableID(mesasFiltradas, selectedReserva);
             
@@ -364,7 +371,7 @@ public class vBooking extends javax.swing.JFrame {
             reserva.SetHora(hora);
             reserva.SetPersonas(personas);
             
-            List<Table> mesasFiltradas = mesas.returnBiggerThan(personas);
+            this.mesasFiltradas = mesas.returnBiggerThan(personas);
             Collections.sort(mesasFiltradas);
             
             int mesa = this.returnTableID(mesasFiltradas, reserva);
