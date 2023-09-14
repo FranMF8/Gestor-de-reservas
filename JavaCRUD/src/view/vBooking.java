@@ -295,6 +295,13 @@ public class vBooking extends javax.swing.JFrame {
     private void UpdateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateButtonActionPerformed
               
         try {
+            
+            /*
+            1) Copiar m en newMesa
+            2) Remover m del arbol
+            3) Modificar m
+            4) Insertar newMesa al arbol
+            */
             if (NameTextField.getText().equals("")) {
                 JOptionPane.showMessageDialog(null, "Campos vacios.");
                 return;
