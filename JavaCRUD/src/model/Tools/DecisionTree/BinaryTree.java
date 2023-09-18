@@ -43,6 +43,52 @@ public class BinaryTree<T extends Comparable<T>> {
         this.root = this.insertRecursively(this.root, value);
     }
     
+    public void removeNode(T value) {
+        this.root = removeRecursively(this.root, value);
+    }
+
+    private TreeNode<T> removeRecursively(TreeNode<T> currentNode, T value) {
+        if (currentNode == null) {
+            return currentNode;
+        }
+
+        if (comparator.compare(value, currentNode.getValue()) < 0) {
+            
+            currentNode.setLeft(removeRecursively(currentNode.getLeft(), value));
+            
+        } else if (comparator.compare(value, currentNode.getValue()) > 0) {
+            
+            currentNode.setRight(removeRecursively(currentNode.getRight(), value));
+            
+        } else {
+            
+        if (currentNode.getLeft() == null) {
+            
+            return currentNode.getRight();
+            
+        } else if (currentNode.getRight() == null) {
+            
+            return currentNode.getLeft();
+            
+        }
+            currentNode.setValue(findMinValue(currentNode.getRight()));
+
+        
+            currentNode.setRight(removeRecursively(currentNode.getRight(), currentNode.getValue()));
+        }
+
+        return currentNode;
+    }
+
+    private T findMinValue(TreeNode<T> node) {
+        T minValue = node.getValue();
+        while (node.getLeft() != null) {
+            minValue = node.getLeft().getValue();
+            node = node.getLeft();
+        }
+        return minValue;
+    }
+
     private void returnBiggerThan(TreeNode<T> node, int quantity, List<T> biggerValues) {
         if (node == null) {
             return;

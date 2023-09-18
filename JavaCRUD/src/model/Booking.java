@@ -62,6 +62,9 @@ public class Booking {
     public void SetHora(LocalTime hour) {
         this.hora = hour;
     }
+    public String GetStringHour() {
+        return this.gestorDeFechas.formatFromLDT(this.hora);
+    }
     ///////personas///////
     public int GetPersonas() {
         return this.personas;

@@ -31,7 +31,6 @@ public class vBooking extends javax.swing.JFrame {
     private Comparator<Table> comparador;
     private BinaryTree<Table> mesas;
     private DefaultTableModel model;
-    private List<Table> mesasFiltradas;
     
     
     private void insertTables() {
@@ -84,19 +83,40 @@ public class vBooking extends javax.swing.JFrame {
     
     public int returnTableID(List<Table> mesasFiltradas, Booking r) {
         
+        Table newMesa;
+        
         for(Table m: mesasFiltradas) {
-            
-            System.out.println(m.getID());
-            Table newMesa = m;
+            newMesa = m;
             if (m.checkTableState(r)) {
                 
                 newMesa.insertBooking(r);
-                mesas.replaceNodeValue(m, newMesa);
-                this.mesasFiltradas = mesas.returnBiggerThan(r.GetPersonas());
+                this.mesas.replaceNodeValue(m, newMesa);                
                 return newMesa.getID();
             }
         }
         
+        return 0;
+    }
+    
+    public int modifyBookingInTree(List<Table> mesasFiltradas, Booking oldBooking, Booking newBooking) {
+        
+        Table newT;
+        
+        for(Table t: mesasFiltradas) {        
+            if (t.checkTableState(newBooking)) {
+                
+                System.out.println("In");
+                
+                newT = t;
+                newT.removeBooking(oldBooking);
+                newT.insertBooking(newBooking);
+                this.mesas.removeNode(t);
+                this.mesas.insertNode(newT);
+                
+                return newT.getID();
+            }
+        }
+        System.out.println("Out");
         return 0;
     }
     
@@ -113,7 +133,6 @@ public class vBooking extends javax.swing.JFrame {
         this.gestor = new DateHandler();
         this.comparador = Comparator.naturalOrder();
         this.mesas = new BinaryTree<Table>(this.comparador);
-        this.mesasFiltradas = new ArrayList<Table>();
         this.model = new DefaultTableModel() {
             
         
@@ -299,7 +318,7 @@ public class vBooking extends javax.swing.JFrame {
             /*
             1) Copiar m en newMesa
             2) Remover m del arbol
-            3) Modificar m
+            3) Modificar newMesa
             4) Insertar newMesa al arbol
             */
             if (NameTextField.getText().equals("")) {
@@ -307,22 +326,26 @@ public class vBooking extends javax.swing.JFrame {
                 return;
             }
             
+            Booking reservaAntigua = this.selectedReserva;
+            
             String nombre = NameTextField.getText();
             LocalTime hora = gestor.formatFromString( (String) HourInput.getSelectedItem());
             int personas = (Integer) PeopleInput.getValue();
             
-            this.mesasFiltradas = mesas.returnBiggerThan(personas);
+            selectedReserva.SetNombre(nombre);
+            selectedReserva.SetHora(hora);
+            selectedReserva.SetPersonas(personas);
             
-            int mesa = this.returnTableID(mesasFiltradas, selectedReserva);
+            List<Table> mesasFiltradas = mesas.returnBiggerThan(personas);                   
+            
+            int mesa = this.modifyBookingInTree(mesasFiltradas,reservaAntigua,selectedReserva);
             
             if (mesa == 0) {
                 JOptionPane.showMessageDialog(null, "No fue posible actualizar la reserva");
                 return;
             }
             
-            selectedReserva.SetNombre(nombre);
-            selectedReserva.SetHora(hora);
-            selectedReserva.SetPersonas(personas);
+            
             selectedReserva.SetMesa(mesa);
             
             if (dao.updateBooking(this.selectedReserva)) {
@@ -378,7 +401,7 @@ public class vBooking extends javax.swing.JFrame {
             reserva.SetHora(hora);
             reserva.SetPersonas(personas);
             
-            this.mesasFiltradas = mesas.returnBiggerThan(personas);
+            List<Table> mesasFiltradas = mesas.returnBiggerThan(personas);
             Collections.sort(mesasFiltradas);
             
             int mesa = this.returnTableID(mesasFiltradas, reserva);
