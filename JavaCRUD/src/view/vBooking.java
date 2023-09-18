@@ -24,14 +24,76 @@ import model.Tools.DecisionTree.BinaryTree;
 public class vBooking extends javax.swing.JFrame {
 
     private daoBooking dao;
-    private ArrayList<Booking> lista;
+    private ArrayList<Booking> listaReservas;
     private int fila = -1;
     private Booking selectedReserva;
     private DateHandler gestor;
     private Comparator<Table> comparador;
     private BinaryTree<Table> mesas;
     private DefaultTableModel model;
+    private ArrayList<Table> listaMesas;
+    private ArrayList<Table> dummyTableList;
     
+    private void handleBookings() {
+        dummyTableList = new ArrayList<Table>();
+                
+        this.insertTablesIntoDummyList();
+        for(Booking r : this.listaReservas) {
+            if (r.GetMesa() == 1) {               
+                System.out.println("Trying at 1");
+                dummyTableList.get(0).updateBooking(r);                
+            } else if (r.GetMesa() == 2) {                
+                System.out.println("Trying at 2");
+                dummyTableList.get(1).updateBooking(r);               
+            } else if (r.GetMesa() == 3) {               
+                System.out.println("Trying at 3");                       
+                dummyTableList.get(2).updateBooking(r);               
+            } else if (r.GetMesa() == 4) {               
+                System.out.println("Trying at 4");               
+                dummyTableList.get(3).updateBooking(r);            
+            } else if (r.GetMesa() == 5) {               
+                System.out.println("Trying at 5");
+                dummyTableList.get(4).updateBooking(r);                
+            } else if (r.GetMesa() == 6) {             
+                System.out.println("Trying at 6");
+                dummyTableList.get(5).updateBooking(r);             
+            }
+        }
+        
+        listaMesas = dummyTableList;
+        
+        System.out.println("Bookings Handled");
+    }
+    
+    private ArrayList<Table> filterTables( ArrayList<Table> toFilterList, int value) {
+        
+        ArrayList<Table> filteredList = new ArrayList<Table>();
+        
+        for( Table t: toFilterList) {
+            if (t.getQuantity() >= value) {
+                filteredList.add(t);
+            }
+        }       
+        return filteredList;
+    }
+    
+    private void insertTablesIntoList() {
+        this.listaMesas.add(new Table(2, 1));
+        this.listaMesas.add(new Table(2, 2));
+        this.listaMesas.add(new Table(4, 3));
+        this.listaMesas.add(new Table(4, 4));
+        this.listaMesas.add(new Table(6, 5));
+        this.listaMesas.add(new Table(6, 6));
+    }
+    
+    private void insertTablesIntoDummyList() {
+        this.dummyTableList.add(new Table(2, 1));
+        this.dummyTableList.add(new Table(2, 2));
+        this.dummyTableList.add(new Table(4, 3));
+        this.dummyTableList.add(new Table(4, 4));
+        this.dummyTableList.add(new Table(6, 5));
+        this.dummyTableList.add(new Table(6, 6));
+    }
     
     private void insertTables() {
         mesas.insertNode(new Table(2, 1));
@@ -51,16 +113,16 @@ public class vBooking extends javax.swing.JFrame {
         DeleteButton.setEnabled(false);
         UpdateButton.setEnabled(false);
         CancelButton.setEnabled(false);
-        this.updateTable();
+        this.selectedReserva = new Booking();    
     }
     
     public void updateTable() {    
         while(model.getRowCount()>0) {
             model.removeRow(0);
         }
-        lista = dao.consultBookings();
-        
-        for(Booking r: lista) {
+        listaReservas = dao.consultBookings();
+        this.handleBookings();
+        for(Booking r: listaReservas) {
             Object reserva[] = new Object[5];
             reserva[0] = r.GetID();
             reserva[1] = r.GetNombre();
@@ -71,6 +133,7 @@ public class vBooking extends javax.swing.JFrame {
             model.addRow(reserva);
         }
         BookingsTable.setModel(model);
+        
     }
     
     public void createTableModel() {
@@ -82,44 +145,25 @@ public class vBooking extends javax.swing.JFrame {
     }
     
     public int returnTableID(List<Table> mesasFiltradas, Booking r) {
+        for(Table m: mesasFiltradas) {
+            if (m.checkTableState(r)) {      
+                return m.getID();
+            }
+        }
         
-        Table newMesa;
+        return 0;
+    }
+    
+    public int replaceTableID(List<Table> mesasFiltradas, Booking r, int id) {
         
         for(Table m: mesasFiltradas) {
-            newMesa = m;
-            if (m.checkTableState(r)) {
-                
-                newMesa.insertBooking(r);
-                this.mesas.replaceNodeValue(m, newMesa);                
-                return newMesa.getID();
+            if (m.checkTableState(r)) {                         
+                m.changeBookingValue(id, r);
             }
         }
         
         return 0;
-    }
-    
-    public int modifyBookingInTree(List<Table> mesasFiltradas, Booking oldBooking, Booking newBooking) {
-        
-        Table newT;
-        
-        for(Table t: mesasFiltradas) {        
-            if (t.checkTableState(newBooking)) {
-                
-                System.out.println("In");
-                
-                newT = t;
-                newT.removeBooking(oldBooking);
-                newT.insertBooking(newBooking);
-                this.mesas.removeNode(t);
-                this.mesas.insertNode(newT);
-                
-                return newT.getID();
-            }
-        }
-        System.out.println("Out");
-        return 0;
-    }
-    
+    }    
     
     /**
      * Creates new form vBooking
@@ -133,6 +177,7 @@ public class vBooking extends javax.swing.JFrame {
         this.gestor = new DateHandler();
         this.comparador = Comparator.naturalOrder();
         this.mesas = new BinaryTree<Table>(this.comparador);
+        this.listaMesas = new ArrayList<Table>();
         this.model = new DefaultTableModel() {
             
         
@@ -144,8 +189,7 @@ public class vBooking extends javax.swing.JFrame {
         
         setLocationRelativeTo(null);
         setTitle("Gestor de Reservas");
-        
-        
+       
         this.createTableModel();
         this.updateTable();
         this.cleanInputs();
@@ -326,19 +370,21 @@ public class vBooking extends javax.swing.JFrame {
                 return;
             }
             
-            Booking reservaAntigua = this.selectedReserva;
-            
+            int id = Integer.parseInt(IDOutputLabel.getText());
             String nombre = NameTextField.getText();
             LocalTime hora = gestor.formatFromString( (String) HourInput.getSelectedItem());
             int personas = (Integer) PeopleInput.getValue();
             
+            Booking reserva = selectedReserva;
+            
+            selectedReserva.SetID(id);
             selectedReserva.SetNombre(nombre);
             selectedReserva.SetHora(hora);
             selectedReserva.SetPersonas(personas);
+                 
+            List<Table> mesasFiltradas = this.filterTables(this.listaMesas, personas);
             
-            List<Table> mesasFiltradas = mesas.returnBiggerThan(personas);                   
-            
-            int mesa = this.modifyBookingInTree(mesasFiltradas,reservaAntigua,selectedReserva);
+            int mesa = this.replaceTableID(mesasFiltradas, selectedReserva, id);
             
             if (mesa == 0) {
                 JOptionPane.showMessageDialog(null, "No fue posible actualizar la reserva");
@@ -352,6 +398,7 @@ public class vBooking extends javax.swing.JFrame {
                 this.updateTable();
                 JOptionPane.showMessageDialog(null, "Reserva actualizada correctamente.");
             }
+            selectedReserva = new Booking();
         } catch(Exception e) {
             JOptionPane.showMessageDialog(null, "ERROR");
         }
@@ -401,8 +448,7 @@ public class vBooking extends javax.swing.JFrame {
             reserva.SetHora(hora);
             reserva.SetPersonas(personas);
             
-            List<Table> mesasFiltradas = mesas.returnBiggerThan(personas);
-            Collections.sort(mesasFiltradas);
+            ArrayList<Table> mesasFiltradas = this.filterTables(listaMesas, personas);
             
             int mesa = this.returnTableID(mesasFiltradas, reserva);
             
@@ -426,13 +472,14 @@ public class vBooking extends javax.swing.JFrame {
     }//GEN-LAST:event_AddButtonActionPerformed
 
     private void CancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelButtonActionPerformed
+        this.updateTable();   
         this.cleanInputs();
     }//GEN-LAST:event_CancelButtonActionPerformed
 
     private void BookingsTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BookingsTableMouseClicked
         fila = BookingsTable.getSelectedRow();
         
-        this.selectedReserva = lista.get(fila);
+        this.selectedReserva = listaReservas.get(fila);
         
         IDOutputLabel.setText("" + selectedReserva.GetID());
         NameTextField.setText(selectedReserva.GetNombre());

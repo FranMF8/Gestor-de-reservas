@@ -85,29 +85,36 @@ public class Table implements Comparable<Table> {
     }
     
     public void insertBooking(Booking r) {
-        this.listBookings();
         this.bookings.add(r);
         System.out.println("Se a;adio la reserva con ID: " + r.GetID());
-        this.listBookings();
     }
     
     public void updateBooking(Booking newBooking) {
     
         for(Booking booking: this.bookings) {
-            if (newBooking.GetID() == booking.GetID()) {
+            if (newBooking.GetID() == booking.GetID()) {                           
                 this.removeBooking(booking);
-                this.bookings.add(newBooking);
+                this.insertBooking(newBooking);      
                 System.out.println("Se actualizo la reserva con ID: " + newBooking.GetID());
-                break;
+                return;
             }
         }
+        this.insertBooking(newBooking);
         
     }
     
     public void removeBooking(Booking toDeleteBooking) {
         this.bookings.remove(toDeleteBooking);
         System.out.println("Se elimino la reserva con ID: " + toDeleteBooking.GetID());
-        this.listBookings();
+    }
+    
+    public void changeBookingValue(int toFindID, Booking newBooking) {
+        
+        for(Booking r: this.bookings) {
+            if (toFindID == r.GetID()) {
+                r = newBooking;
+            }
+        }
     }
     
     public void listBookings() {
@@ -118,6 +125,16 @@ public class Table implements Comparable<Table> {
             System.out.println("Personas: " + b.GetPersonas());
             System.out.println("Mesa: " + b.GetMesa());
         }
+    }
+    
+    public void listBooking(Booking b) {
+        
+        System.out.println("Mesa: " + this.getID());
+        System.out.println("ID: " + b.GetID());
+        System.out.println("Nombre: " + b.GetNombre());
+        System.out.println("Hora: " + b.GetHora());
+        System.out.println("Personas: " + b.GetPersonas());
+        System.out.println("Mesa: " + b.GetMesa());
     }
     
     public boolean checkTableState(Booking reserva) {
