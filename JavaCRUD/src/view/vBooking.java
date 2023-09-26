@@ -63,7 +63,8 @@ public class vBooking extends javax.swing.JFrame {
         System.out.println("Bookings Handled");
     }
     
-    private ArrayList<Table> filterTables( ArrayList<Table> toFilterList, int value) {
+    private ArrayList<Table> filterTables( ArrayList<Table> toFilterList, int value) 
+    {
         
         ArrayList<Table> filteredList = new ArrayList<Table>();
         
@@ -73,6 +74,60 @@ public class vBooking extends javax.swing.JFrame {
             }
         }       
         return filteredList;
+    }
+    
+    private int update() {
+        try {
+            if (NameTextField.getText().equals("")) {
+                JOptionPane.showMessageDialog(null, "Campos vacios.");
+                return 0;
+            }
+            
+            Booking reserva = new Booking();
+            int id = Integer.parseInt(IDOutputLabel.getText());
+            String nombre = NameTextField.getText();
+            String horaString = (String) HourInput.getSelectedItem();
+            LocalTime hora = gestor.formatFromString(horaString);
+            int personas = (Integer) PeopleInput.getValue();
+            
+            reserva.SetID(id);
+            reserva.SetNombre(nombre);
+            reserva.SetHora(hora);
+            reserva.SetPersonas(personas);
+            
+            ArrayList<Table> mesasFiltradas = this.filterTables(listaMesas, personas);
+            
+            int mesa = this.replaceTableID(mesasFiltradas, reserva, id);
+     
+            
+            if (mesa == 0) {
+                if (dao.deleteBooking(id)) {
+                    this.updateTable();
+                    mesa = this.returnTableID(mesasFiltradas, reserva);   
+                    System.out.println("" + mesa);
+                    System.out.println();
+                    this.update();
+                    return 1;
+                }
+                else {
+                JOptionPane.showMessageDialog(null, "No fue posible actualizar la reserva.");          
+                return 0;
+                }
+            }         
+            
+            reserva.SetMesa(mesa);
+            
+            if (dao.deleteAndReAdd(reserva)) {
+                this.updateTable();
+                JOptionPane.showMessageDialog(null, "Reserva actualizada correctamente.");
+                return 1;
+            }
+        } catch(Exception e) {
+            JOptionPane.showMessageDialog(null, "Error al actualizar la reserva");
+            e.printStackTrace();
+            return 0;
+        }
+        return 0;
     }
     
     private void insertTablesIntoDummyList() {
@@ -347,52 +402,10 @@ public class vBooking extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void UpdateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateButtonActionPerformed
-        try {
-            if (NameTextField.getText().equals("")) {
-                JOptionPane.showMessageDialog(null, "Campos vacios.");
-                return;
-            }
-            
-            Booking reserva = new Booking();
-            int id = Integer.parseInt(IDOutputLabel.getText());
-            String nombre = NameTextField.getText();
-            String horaString = (String) HourInput.getSelectedItem();
-            LocalTime hora = gestor.formatFromString(horaString);
-            int personas = (Integer) PeopleInput.getValue();
-            
-            reserva.SetID(id);
-            reserva.SetNombre(nombre);
-            reserva.SetHora(hora);
-            reserva.SetPersonas(personas);
-            
-            ArrayList<Table> mesasFiltradas = this.filterTables(listaMesas, personas);
-            
-            int mesa = this.replaceTableID(mesasFiltradas, reserva, id);
-            
-            if (mesa == 0) {
-                if (dao.deleteBooking(id)) {
-                    this.updateTable();
-                    mesa = this.returnTableID(mesasFiltradas, reserva);   
-                    System.out.println("" + mesa);
-                    System.out.println();
-                    this.AddButtonActionPerformed(evt);
-                    return;
-                }
-                else {
-                JOptionPane.showMessageDialog(null, "No fue posible actualizar la reserva.");          
-                return;
-                }
-            }         
-            
-            reserva.SetMesa(mesa);
-            
-            if (dao.deleteAndReAdd(reserva)) {
-                this.updateTable();
-                JOptionPane.showMessageDialog(null, "Reserva actualizada correctamente.");
-            }
-        } catch(Exception e) {
-            JOptionPane.showMessageDialog(null, "Error al actualizar la reserva");
-            e.printStackTrace();
+        int updated = update();
+        
+        while(updated == 0) {
+            updated = update();
         }
     }//GEN-LAST:event_UpdateButtonActionPerformed
 
