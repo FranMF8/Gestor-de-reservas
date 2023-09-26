@@ -157,8 +157,6 @@ public class vBooking extends javax.swing.JFrame {
         this.gestor = new DateHandler();
         this.listaMesas = new ArrayList<Table>();
         this.model = new DefaultTableModel() {
-            
-        
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
