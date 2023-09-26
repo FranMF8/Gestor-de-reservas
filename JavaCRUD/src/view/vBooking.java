@@ -28,8 +28,6 @@ public class vBooking extends javax.swing.JFrame {
     private int fila = -1;
     private Booking selectedReserva;
     private DateHandler gestor;
-    private Comparator<Table> comparador;
-    private BinaryTree<Table> mesas;
     private DefaultTableModel model;
     private ArrayList<Table> listaMesas;
     private ArrayList<Table> dummyTableList;
@@ -77,15 +75,6 @@ public class vBooking extends javax.swing.JFrame {
         return filteredList;
     }
     
-    private void insertTablesIntoList() {
-        this.listaMesas.add(new Table(2, 1));
-        this.listaMesas.add(new Table(2, 2));
-        this.listaMesas.add(new Table(4, 3));
-        this.listaMesas.add(new Table(4, 4));
-        this.listaMesas.add(new Table(6, 5));
-        this.listaMesas.add(new Table(6, 6));
-    }
-    
     private void insertTablesIntoDummyList() {
         this.dummyTableList.add(new Table(2, 1));
         this.dummyTableList.add(new Table(2, 2));
@@ -94,16 +83,7 @@ public class vBooking extends javax.swing.JFrame {
         this.dummyTableList.add(new Table(6, 5));
         this.dummyTableList.add(new Table(6, 6));
     }
-    
-    private void insertTables() {
-        mesas.insertNode(new Table(2, 1));
-        mesas.insertNode(new Table(2, 2));
-        mesas.insertNode(new Table(4, 3));
-        mesas.insertNode(new Table(4, 4));     
-        mesas.insertNode(new Table(6, 5));
-        mesas.insertNode(new Table(6, 6));
-    }
-    
+
     public void cleanInputs() {
         NameTextField.setText("");
         PeopleInput.setValue(1);
@@ -175,8 +155,6 @@ public class vBooking extends javax.swing.JFrame {
         this.dao = new daoBooking();
         this.selectedReserva = new Booking();
         this.gestor = new DateHandler();
-        this.comparador = Comparator.naturalOrder();
-        this.mesas = new BinaryTree<Table>(this.comparador);
         this.listaMesas = new ArrayList<Table>();
         this.model = new DefaultTableModel() {
             
@@ -193,7 +171,6 @@ public class vBooking extends javax.swing.JFrame {
         this.createTableModel();
         this.updateTable();
         this.cleanInputs();
-        this.insertTables();
     }
 
     @SuppressWarnings("unchecked")
@@ -356,54 +333,43 @@ public class vBooking extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void UpdateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateButtonActionPerformed
-              
         try {
-            
-            /*
-            1) Copiar m en newMesa
-            2) Remover m del arbol
-            3) Modificar newMesa
-            4) Insertar newMesa al arbol
-            */
             if (NameTextField.getText().equals("")) {
                 JOptionPane.showMessageDialog(null, "Campos vacios.");
                 return;
             }
             
+            Booking reserva = new Booking();
             int id = Integer.parseInt(IDOutputLabel.getText());
             String nombre = NameTextField.getText();
-            LocalTime hora = gestor.formatFromString( (String) HourInput.getSelectedItem());
+            String horaString = (String) HourInput.getSelectedItem();
+            LocalTime hora = gestor.formatFromString(horaString);
             int personas = (Integer) PeopleInput.getValue();
             
-            Booking reserva = selectedReserva;
+            reserva.SetID(id);
+            reserva.SetNombre(nombre);
+            reserva.SetHora(hora);
+            reserva.SetPersonas(personas);
             
-            selectedReserva.SetID(id);
-            selectedReserva.SetNombre(nombre);
-            selectedReserva.SetHora(hora);
-            selectedReserva.SetPersonas(personas);
-                 
-            List<Table> mesasFiltradas = this.filterTables(this.listaMesas, personas);
+            ArrayList<Table> mesasFiltradas = this.filterTables(listaMesas, personas);
             
-            int mesa = this.replaceTableID(mesasFiltradas, selectedReserva, id);
+            int mesa = this.returnTableID(mesasFiltradas, reserva);
             
             if (mesa == 0) {
-                JOptionPane.showMessageDialog(null, "No fue posible actualizar la reserva");
+                JOptionPane.showMessageDialog(null, "La reserva no es posible.");          
                 return;
-            }
+            }         
             
+            reserva.SetMesa(mesa);
             
-            selectedReserva.SetMesa(mesa);
-            
-            if (dao.updateBooking(this.selectedReserva)) {
+            if (dao.deleteAndReAdd(reserva)) {
                 this.updateTable();
                 JOptionPane.showMessageDialog(null, "Reserva actualizada correctamente.");
             }
-            selectedReserva = new Booking();
         } catch(Exception e) {
             JOptionPane.showMessageDialog(null, "ERROR");
+            e.printStackTrace();
         }
-        
-        this.cleanInputs();
     }//GEN-LAST:event_UpdateButtonActionPerformed
 
     private void DeleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteButtonActionPerformed

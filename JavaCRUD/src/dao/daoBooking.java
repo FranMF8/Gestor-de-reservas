@@ -82,6 +82,28 @@ public class daoBooking {
         }
     }
     
+    public boolean deleteAndReAdd(Booking reserva) {
+        
+        this.deleteBooking(reserva.GetID());
+        
+        PreparedStatement ps = null;
+        DateHandler gestor = new DateHandler();
+        try {
+            ps = con.Connect().prepareStatement("INSERT INTO Reservas VALUES(?,?,?,?,?)");
+            ps.setInt(1, reserva.GetID());
+            ps.setString(2, reserva.GetNombre());
+            ps.setInt(3, reserva.GetMesa());
+            ps.setString(4, gestor.formatFromLDT(reserva.GetHora()));
+            ps.setInt(5, reserva.GetPersonas());
+            ps.executeUpdate();
+            con.Disconnect();
+            return true;          
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
     public ArrayList<Booking> consultBookings() {
         ArrayList<Booking> lista = new ArrayList<Booking>();
         
