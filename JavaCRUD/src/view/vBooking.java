@@ -356,7 +356,7 @@ public class vBooking extends javax.swing.JFrame {
             int mesa = this.returnTableID(mesasFiltradas, reserva);
             
             if (mesa == 0) {
-                JOptionPane.showMessageDialog(null, "La reserva no es posible.");          
+                JOptionPane.showMessageDialog(null, "No fue posible actualizar la reserva.");          
                 return;
             }         
             
@@ -367,7 +367,7 @@ public class vBooking extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Reserva actualizada correctamente.");
             }
         } catch(Exception e) {
-            JOptionPane.showMessageDialog(null, "ERROR");
+            JOptionPane.showMessageDialog(null, "Error al actualizar la reserva");
             e.printStackTrace();
         }
     }//GEN-LAST:event_UpdateButtonActionPerformed
