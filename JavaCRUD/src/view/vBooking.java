@@ -225,11 +225,7 @@ public class vBooking extends javax.swing.JFrame {
         
         return 0;
     }    
-    
-    /**
-     * Creates new form vBooking
-     */
-    
+  
     public vBooking() {
         initComponents();
         
@@ -535,9 +531,7 @@ public class vBooking extends javax.swing.JFrame {
         CancelButton.setEnabled(true);
         CancelButton.setFocusable(true);
     }//GEN-LAST:event_BookingsTableMouseClicked
-
-    
-    
+   
     private void HourInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HourInputActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_HourInputActionPerformed
