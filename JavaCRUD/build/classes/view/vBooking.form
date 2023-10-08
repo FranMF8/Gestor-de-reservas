@@ -70,7 +70,7 @@
                           <Component id="IDOutputLabel" min="-2" pref="32" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="TableOutputLabel" alignment="1" min="-2" pref="32" max="-2" attributes="0"/>
                           <Component id="TableLabel" alignment="1" min="-2" pref="32" max="-2" attributes="0"/>
                       </Group>
@@ -131,6 +131,10 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="NameTextField">
+      <Events>
+        <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="NameTextFieldFocusGained"/>
+        <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="NameTextFieldFocusLost"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="HourLabel">
       <Properties>
@@ -247,6 +251,7 @@
             </Property>
           </Properties>
           <Events>
+            <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="BookingsTableFocusGained"/>
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="BookingsTableMouseClicked"/>
           </Events>
         </Component>

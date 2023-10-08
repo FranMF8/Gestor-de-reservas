@@ -5,17 +5,16 @@
 package view;
 
 import dao.daoBooking;
+import java.awt.Color;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import model.Booking;
 import model.Tables.Table;
 import model.Tools.DateHandler;
-import model.Tools.DecisionTree.BinaryTree;
 
 /**
  *
@@ -31,6 +30,20 @@ public class vBooking extends javax.swing.JFrame {
     private DefaultTableModel model;
     private ArrayList<Table> listaMesas;
     private ArrayList<Table> dummyTableList;
+    
+    private void makeHintOnFocus(JTextField field, String toShowMessage) {
+        if (field.getText().equals("")) {
+            field.setText(toShowMessage);
+            field.setForeground(new Color(115, 113, 112));
+        }
+    }
+    
+    private void quitHintOnFocus(JTextField field, String toShowMessage) {
+        if (field.getText().equals(toShowMessage)) {
+            field.setText("");
+            field.setForeground(new Color(0, 0, 0));
+        }
+    }
     
     private void handleBookings() {
         dummyTableList = new ArrayList<Table>();
@@ -149,6 +162,8 @@ public class vBooking extends javax.swing.JFrame {
         DeleteButton.setEnabled(false);
         UpdateButton.setEnabled(false);
         CancelButton.setEnabled(false);
+
+        this.makeHintOnFocus(NameTextField, "Ingrese nombre...");
         this.selectedReserva = new Booking();    
     }
     
@@ -259,6 +274,15 @@ public class vBooking extends javax.swing.JFrame {
         NameLabel.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         NameLabel.setText("Nombre:");
 
+        NameTextField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                NameTextFieldFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                NameTextFieldFocusLost(evt);
+            }
+        });
+
         HourLabel.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         HourLabel.setText("Hora:");
 
@@ -316,6 +340,11 @@ public class vBooking extends javax.swing.JFrame {
         ));
         BookingsTable.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         BookingsTable.getTableHeader().setReorderingAllowed(false);
+        BookingsTable.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                BookingsTableFocusGained(evt);
+            }
+        });
         BookingsTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 BookingsTableMouseClicked(evt);
@@ -371,9 +400,9 @@ public class vBooking extends javax.swing.JFrame {
                             .addComponent(IDLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(IDOutputLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(TableOutputLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(TableLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(TableOutputLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(TableLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(NameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -489,16 +518,36 @@ public class vBooking extends javax.swing.JFrame {
         NameTextField.setText(selectedReserva.GetNombre());
         PeopleInput.setValue(selectedReserva.GetPersonas());
         HourInput.setSelectedItem( (String) gestor.formatFromLDT(selectedReserva.GetHora()));
+        NameTextField.setForeground(new Color(0, 0, 0));
         
         AddButton.setEnabled(false);
         DeleteButton.setEnabled(true);
         UpdateButton.setEnabled(true);
         CancelButton.setEnabled(true);
+        CancelButton.setFocusable(true);
     }//GEN-LAST:event_BookingsTableMouseClicked
 
+    
+    
     private void HourInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HourInputActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_HourInputActionPerformed
+
+    private void NameTextFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_NameTextFieldFocusGained
+        this.quitHintOnFocus(NameTextField, "Ingrese nombre...");
+        this.CancelButton.setEnabled(true);
+        this.CancelButton.setFocusPainted(true);
+    }//GEN-LAST:event_NameTextFieldFocusGained
+
+    private void NameTextFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_NameTextFieldFocusLost
+        this.makeHintOnFocus(NameTextField, "Ingrese nombre...");
+        this.cleanInputs();
+        this.CancelButton.setFocusPainted(false);
+    }//GEN-LAST:event_NameTextFieldFocusLost
+
+    private void BookingsTableFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_BookingsTableFocusGained
+        
+    }//GEN-LAST:event_BookingsTableFocusGained
     
     /**
      * @param args the command line arguments
