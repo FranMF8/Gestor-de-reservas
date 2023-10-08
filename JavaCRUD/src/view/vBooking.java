@@ -50,24 +50,33 @@ public class vBooking extends javax.swing.JFrame {
                 
         this.insertTablesIntoDummyList();
         for(Booking r : this.listaReservas) {
-            if (r.GetMesa() == 1) {               
-                System.out.println("Trying at 1");
-                dummyTableList.get(0).updateBooking(r);                
-            } else if (r.GetMesa() == 2) {                
-                System.out.println("Trying at 2");
-                dummyTableList.get(1).updateBooking(r);               
-            } else if (r.GetMesa() == 3) {               
-                System.out.println("Trying at 3");                       
-                dummyTableList.get(2).updateBooking(r);               
-            } else if (r.GetMesa() == 4) {               
-                System.out.println("Trying at 4");               
-                dummyTableList.get(3).updateBooking(r);            
-            } else if (r.GetMesa() == 5) {               
-                System.out.println("Trying at 5");
-                dummyTableList.get(4).updateBooking(r);                
-            } else if (r.GetMesa() == 6) {             
-                System.out.println("Trying at 6");
-                dummyTableList.get(5).updateBooking(r);             
+            switch (r.GetMesa()) {
+                case 1 -> {
+                    System.out.println("Trying at 1");
+                    dummyTableList.get(0).updateBooking(r);
+                }
+                case 2 -> {
+                    System.out.println("Trying at 2");
+                    dummyTableList.get(1).updateBooking(r);
+                }
+                case 3 -> {
+                    System.out.println("Trying at 3");
+                    dummyTableList.get(2).updateBooking(r);
+                }
+                case 4 -> {
+                    System.out.println("Trying at 4");
+                    dummyTableList.get(3).updateBooking(r);
+                }
+                case 5 -> {             
+                    System.out.println("Trying at 5");
+                    dummyTableList.get(4).updateBooking(r);
+                }
+                case 6 -> {
+                    System.out.println("Trying at 6");
+                    dummyTableList.get(5).updateBooking(r);
+                }
+                default -> {
+                }
             }
         }
         
