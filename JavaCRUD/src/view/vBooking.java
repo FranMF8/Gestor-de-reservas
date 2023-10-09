@@ -477,7 +477,7 @@ public class vBooking extends javax.swing.JFrame {
 
     private void AddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddButtonActionPerformed
         try {
-            if (NameTextField.getText().equals("")) {
+            if (NameTextField.getText().equals("") || NameTextField.getText().equals("Ingrese nombre...")) {
                 JOptionPane.showMessageDialog(null, "Campos vacios.");
                 return;
             }
