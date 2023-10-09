@@ -101,7 +101,7 @@ public class vBooking extends javax.swing.JFrame {
     
     private int update() {
         try {
-            if (NameTextField.getText().equals("")) {
+            if (NameTextField.getText().equals("") || NameTextField.getText().equals("Ingrese nombre...")) {
                 JOptionPane.showMessageDialog(null, "Campos vacios.");
                 return 0;
             }
