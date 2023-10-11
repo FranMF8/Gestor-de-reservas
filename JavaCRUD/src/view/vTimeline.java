@@ -6,7 +6,6 @@ package view;
 
 import java.awt.Color;
 import java.awt.GridLayout;
-import java.util.Random;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
@@ -25,9 +24,10 @@ public class vTimeline extends javax.swing.JFrame {
         
         for (JPanel[] column : gridRows) {
             column = new JPanel[11];
+             Color rndmClr = colorGenerator.generateRandomColor();
             
-            Color rndmClr = colorGenerator.generateRandomColor();
-            for (JPanel row : column) {                              
+            for (JPanel row : column) {  
+               
                 row = new JPanel();
                 Border blackline = BorderFactory.createLineBorder(Color.black);
                 row.setBackground(rndmClr);
