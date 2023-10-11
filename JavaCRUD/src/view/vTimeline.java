@@ -8,15 +8,14 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.util.Random;
 import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
+import model.Tools.ColorHandler;
 
 public class vTimeline extends javax.swing.JFrame {
     
     JPanel[][] gridRows = new JPanel[6][]; //Each row contains every column
-    
+    ColorHandler colorGenerator = new ColorHandler();
     
     public vTimeline() {
         initComponents();
@@ -27,7 +26,7 @@ public class vTimeline extends javax.swing.JFrame {
         for (JPanel[] column : gridRows) {
             column = new JPanel[11];
             
-            Color rndmClr = generateRandomColor();
+            Color rndmClr = colorGenerator.generateRandomColor();
             for (JPanel row : column) {                              
                 row = new JPanel();
                 Border blackline = BorderFactory.createLineBorder(Color.black);
@@ -36,15 +35,6 @@ public class vTimeline extends javax.swing.JFrame {
                 Grid.add(row);
             }
         }        
-    }
-    
-    private Color generateRandomColor() {
-        Random randomGen = new Random();;
-        int r = randomGen.nextInt(256);
-        int g = randomGen.nextInt(256);
-        int b = randomGen.nextInt(256);
-        
-        return new Color(r, g, b);
     }
     
     @SuppressWarnings("unchecked")
