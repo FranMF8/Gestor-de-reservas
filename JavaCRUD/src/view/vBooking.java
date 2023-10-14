@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
@@ -34,6 +35,7 @@ public class vBooking extends javax.swing.JFrame {
     
     public vBooking() {
         initComponents();
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setTitle("Gestor de reservas");
         
         this.dao = new daoBooking();
@@ -226,6 +228,7 @@ public class vBooking extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        openTimelineButton = new javax.swing.JButton();
         IDLabel = new javax.swing.JLabel();
         IDOutputLabel = new javax.swing.JLabel();
         NameLabel = new javax.swing.JLabel();
@@ -244,6 +247,13 @@ public class vBooking extends javax.swing.JFrame {
         TableLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        openTimelineButton.setText("Ver reservas");
+        openTimelineButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                openTimelineButtonActionPerformed(evt);
+            }
+        });
 
         IDLabel.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         IDLabel.setText("ID:");
@@ -342,7 +352,7 @@ public class vBooking extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(48, 48, 48)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(IDLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -370,7 +380,8 @@ public class vBooking extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(TableLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(TableOutputLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(TableOutputLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(openTimelineButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(49, 49, 49)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 727, Short.MAX_VALUE)
                 .addContainerGap())
@@ -381,7 +392,12 @@ public class vBooking extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(44, 44, 44)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 462, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(openTimelineButton, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(IDLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(IDOutputLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -407,9 +423,8 @@ public class vBooking extends javax.swing.JFrame {
                             .addComponent(DeleteButton)
                             .addComponent(CancelButton))
                         .addGap(18, 18, 18)
-                        .addComponent(AddButton, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 462, Short.MAX_VALUE))
-                .addContainerGap())
+                        .addComponent(AddButton, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(60, 60, 60))))
         );
 
         pack();
@@ -498,6 +513,7 @@ public class vBooking extends javax.swing.JFrame {
         
         this.selectedReserva = listaReservas.get(fila);
         
+        
         IDOutputLabel.setText("" + selectedReserva.GetID());
         TableOutputLabel.setText("" + selectedReserva.GetMesa());
         NameTextField.setText(selectedReserva.GetNombre());
@@ -530,6 +546,11 @@ public class vBooking extends javax.swing.JFrame {
     private void BookingsTableFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_BookingsTableFocusGained
         
     }//GEN-LAST:event_BookingsTableFocusGained
+
+    private void openTimelineButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openTimelineButtonActionPerformed
+        vTimeline timeline = new vTimeline();
+        timeline.setVisible(true);
+    }//GEN-LAST:event_openTimelineButtonActionPerformed
     
     /**
      * @param args the command line arguments
@@ -561,7 +582,9 @@ public class vBooking extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new vBooking().setVisible(true);
+                vBooking bookingFrame = new vBooking();
+                bookingFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                bookingFrame.setVisible(true);
             }
         });
     }
@@ -583,5 +606,6 @@ public class vBooking extends javax.swing.JFrame {
     private javax.swing.JLabel TableOutputLabel;
     private javax.swing.JButton UpdateButton;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton openTimelineButton;
     // End of variables declaration//GEN-END:variables
 }

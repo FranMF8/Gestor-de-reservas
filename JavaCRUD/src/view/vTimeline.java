@@ -9,8 +9,11 @@ import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import javax.swing.BorderFactory;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
@@ -32,8 +35,13 @@ public class vTimeline extends javax.swing.JFrame {
        
     public vTimeline() {
         initComponents();    
+        
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        
         this.setTitle("Timeline");
-        this.setSize(1500, 600);       
+        this.setSize(1300, 500); 
+        this.setResizable(false);
         
         gridRows = new JPanel[7][];//Each row contains every column
         colorGenerator = new ColorHandler();
@@ -221,7 +229,11 @@ public class vTimeline extends javax.swing.JFrame {
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new vTimeline().setVisible(true);
+
+                
+                vTimeline timelineFrame = new vTimeline();
+                timelineFrame.setVisible(true);
+                
             }
         });
     }
