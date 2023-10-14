@@ -14,6 +14,7 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import model.Booking;
 import model.Tables.Table;
+import model.Tools.BookingHandler;
 import model.Tools.DateHandler;
 
 /**
@@ -72,40 +73,9 @@ public class vBooking extends javax.swing.JFrame {
         dummyTableList = new ArrayList<Table>();
                 
         this.insertTablesIntoDummyList();
-        for(Booking r : this.listaReservas) {
-            switch (r.GetMesa()) {
-                case 1 -> {
-                    System.out.println("Trying at 1");
-                    dummyTableList.get(0).updateBooking(r);
-                }
-                case 2 -> {
-                    System.out.println("Trying at 2");
-                    dummyTableList.get(1).updateBooking(r);
-                }
-                case 3 -> {
-                    System.out.println("Trying at 3");
-                    dummyTableList.get(2).updateBooking(r);
-                }
-                case 4 -> {
-                    System.out.println("Trying at 4");
-                    dummyTableList.get(3).updateBooking(r);
-                }
-                case 5 -> {             
-                    System.out.println("Trying at 5");
-                    dummyTableList.get(4).updateBooking(r);
-                }
-                case 6 -> {
-                    System.out.println("Trying at 6");
-                    dummyTableList.get(5).updateBooking(r);
-                }
-                default -> {
-                }
-            }
-        }
+        BookingHandler gestorReservas = new BookingHandler();
         
-        listaMesas = dummyTableList;
-        
-        System.out.println("Bookings Handled");
+        listaMesas = gestorReservas.insertBookingsIntoTables(dummyTableList, listaReservas);
     }
     
     private ArrayList<Table> filterTables( ArrayList<Table> toFilterList, int value) 
