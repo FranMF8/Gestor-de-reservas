@@ -9,6 +9,9 @@ import java.awt.Color;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -32,6 +35,7 @@ public class vBooking extends javax.swing.JFrame {
     private DefaultTableModel model;
     private ArrayList<Table> listaMesas;
     private ArrayList<Table> dummyTableList;
+    private int counter;
     
     public vBooking() {
         initComponents();
@@ -48,6 +52,7 @@ public class vBooking extends javax.swing.JFrame {
                 return false;
             }
         };
+        counter = 0;
         
         setLocationRelativeTo(null);
         setTitle("Gestor de Reservas");
@@ -94,7 +99,7 @@ public class vBooking extends javax.swing.JFrame {
         return filteredList;
     }
     
-    private int update() {
+    private int update(Booking reservaGuardada) {
         try {
             if (NameTextField.getText().equals("") || NameTextField.getText().equals("Ingrese nombre...")) {
                 JOptionPane.showMessageDialog(null, "Campos vacios.");
@@ -119,16 +124,20 @@ public class vBooking extends javax.swing.JFrame {
      
             
             if (mesa == 0) {
-                if (dao.deleteBooking(id)) {
+                if (dao.deleteBooking(id) && counter < 67) {
+                    counter++;
                     this.updateTable();
                     mesa = this.returnTableID(mesasFiltradas, reserva);   
-                    System.out.println("" + mesa);
+                    System.out.println("Mesa: " + mesa);
                     System.out.println();
-                    this.update();
+                    this.update(reservaGuardada);
+                    counter = 0;
                     return 1;
                 }
                 else {
-                JOptionPane.showMessageDialog(null, "No fue posible actualizar la reserva.");          
+                JOptionPane.showMessageDialog(null, "No fue posible actualizar la reserva.");
+                dao.insertBooking(reservaGuardada);
+                counter = 0;
                 return 0;
                 }
             }         
@@ -430,11 +439,10 @@ public class vBooking extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void UpdateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateButtonActionPerformed
-        int updated = update();
-        
-        while(updated == 0) {
-            updated = update();
-        }
+        Booking reservaGuardada = selectedReserva;
+        update(reservaGuardada);
+
+        this.updateTable();
         this.cleanInputs();
     }//GEN-LAST:event_UpdateButtonActionPerformed
 
