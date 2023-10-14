@@ -4,21 +4,46 @@
  */
 package view;
 
+import dao.daoBooking;
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.util.ArrayList;
 import javax.swing.BorderFactory;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
+import model.Booking;
+import model.Tables.Table;
+import model.Tools.BookingHandler;
 import model.Tools.ColorHandler;
 
 public class vTimeline extends javax.swing.JFrame {
     
-    JPanel[][] gridRows = new JPanel[7][]; //Each row contains every column
-    ColorHandler colorGenerator = new ColorHandler();
-    
+    JPanel[][] gridRows; 
+    ColorHandler colorGenerator;
+    private ArrayList<Table> listaMesas;
+    private ArrayList<Table> dummyTableList;
+    private ArrayList<Booking> listaReservas;
+    private daoBooking dao;
+    BookingHandler gestorReservas;
+    boolean painted = false;
+       
     public vTimeline() {
-        initComponents();       
+        initComponents();    
         
+        gridRows = new JPanel[7][];//Each row contains every column
+        colorGenerator = new ColorHandler();
+        listaMesas = new ArrayList<Table>();
+        dummyTableList = new ArrayList<Table>();
+        listaReservas = new ArrayList<Booking>();
+        dao = new daoBooking();
+        gestorReservas = new BookingHandler();
+        painted = false;
+        
+        updateBookings();
         Grid.setLayout(new GridLayout(7, 12));
         PaintGrid();       
     }
@@ -26,35 +51,129 @@ public class vTimeline extends javax.swing.JFrame {
     //Methods
     
     private void PaintGrid() {
-        int j = 0;
-        for (JPanel[] column : gridRows) {
-            int i = 0;
-            boolean paintWhite = false;
-            if (j == 0) {
-                paintWhite = true;
-            }
-            column = new JPanel[11];
-             Color rndmClr = colorGenerator.generateRandomColor();
-            
-            for (JPanel row : column) {  
+        int rowIndex = 0;
+        for (JPanel[] row : gridRows) {
+            int columnIndex = 0;
+            boolean isfirstRow = false;
+            if (rowIndex == 0) {
                 
-                row = new JPanel();
+                isfirstRow = true;
+            }
+            row = new JPanel[12];
+             Color rndmClr = colorGenerator.generateRandomColor();
+            for (JPanel column : row) {  
+                
+                column = new JPanel();
                 Border blackline = BorderFactory.createLineBorder(Color.black);                         
                 
-                if (i == 0 || paintWhite) {
-                    row.setBackground(colorGenerator.createColor(255, 255, 255));
-                    row.setBorder(blackline);
+                if (columnIndex == 0 || isfirstRow) {
+                    column.setBackground(colorGenerator.createColor(255, 255, 255));
+                    column.setBorder(blackline);
+                    
+                    if (isfirstRow) {
+                        addHourLabels(column, columnIndex);
+                    } else {
+                        JLabel table = new JLabel();
+                        table.setText("Mesa " + rowIndex);                   
+                        column.setLayout(new GridBagLayout());
+                        column.add(table, new GridBagConstraints());
+                    }
                 } else {
-                    row.setBackground(rndmClr);   
+                    
+                    painted = paintBookings(rndmClr, column, columnIndex, rowIndex);
+                    if (painted) {
+                        System.out.println("Fila: " + rowIndex);
+                        System.out.println("Columna: " + columnIndex);
+                    }
                 }
-                Grid.add(row);
-                i++;
+                Grid.add(column);
+                columnIndex++;
             }
-            j++;
+            rowIndex++;
         } 
     }
     
-    @SuppressWarnings("unchecked")
+    private void handleBookings() {
+        dummyTableList = new ArrayList<Table>();
+        
+        this.insertTablesIntoDummyList();    
+        
+        
+        listaMesas = gestorReservas.insertBookingsIntoTables(dummyTableList, listaReservas);      
+    }
+    
+    private void insertTablesIntoDummyList() {
+        this.dummyTableList.add(new Table(2, 1));
+        this.dummyTableList.add(new Table(2, 2));
+        this.dummyTableList.add(new Table(4, 3));
+        this.dummyTableList.add(new Table(4, 4));
+        this.dummyTableList.add(new Table(6, 5));
+        this.dummyTableList.add(new Table(6, 6));
+    }
+    
+    private void updateBookings() {
+        listaReservas = dao.consultBookings();
+        this.handleBookings();
+    }
+    
+    private boolean paintBookings(Color clr, JPanel panel, int columnIndex, int rowIndex) {
+        for(Table t : listaMesas) {
+            for(Booking b : t.bookings) {
+                if (!b.equals(null)) {             
+                    
+                if (b.GetMesa() == rowIndex && gestorReservas.getHourIndex(b) == columnIndex) {
+                    
+                    
+                    System.out.println("Indice Hora: " + gestorReservas.getHourIndex(b));
+                        System.out.println("Indice fila: " + columnIndex);
+                        System.out.println();
+                        System.out.println();
+                        System.out.println();
+                        System.out.println("Indice Mesa: " + b.GetMesa());
+                        System.out.println("Indice columna: " + rowIndex);
+                        System.out.println();
+                        System.out.println();
+                        System.out.println();
+                        
+                        
+                    panel.setBackground(clr);                 
+                    return true;
+                }
+                }            
+            }
+        }
+        panel.setBackground(colorGenerator.createColor(255, 255, 255));  
+        return false;
+    }
+    
+    private void addHourLabels(JPanel row, int i) {
+        JLabel hour = new JLabel();
+        if (i == 1) {
+            hour.setText("19:00");
+        } else if (i == 2) {
+            hour.setText("19:30");
+        } else if (i == 3) {
+            hour.setText("20:00");
+        } else if (i == 4) {
+            hour.setText("20:30");
+        } else if (i == 5) {
+            hour.setText("21:00");
+        } else if (i == 6) {
+            hour.setText("21:30");
+        } else if (i == 7) {
+            hour.setText("22:00");
+        } else if (i == 8) {
+            hour.setText("22:30");
+        } else if (i == 9) {
+            hour.setText("23:00");
+        } else if (i == 10) {
+            hour.setText("23:30");
+        } else if (i == 11) {
+            hour.setText("00:00");           
+        }  
+        row.setLayout(new GridBagLayout());
+        row.add(hour, new GridBagConstraints());
+    }
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 

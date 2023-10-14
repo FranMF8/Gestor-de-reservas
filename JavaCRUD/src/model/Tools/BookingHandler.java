@@ -54,4 +54,32 @@ public class BookingHandler {
         
         return toReturnList;
     }
+    
+    public int getHourIndex(Booking b) {
+        if (b.GetStringHour().equals("19:00") ) {
+            return 1;
+        } else if (b.GetStringHour().equals("19:30")) {
+            return 2;
+        } else if (b.GetStringHour().equals("20:00")) {
+            return 3;
+        } else if (b.GetStringHour().equals("20:30")) {
+            return 4;
+        } else if (b.GetStringHour().equals("21:00")) {
+            return 5;
+        } else if (b.GetStringHour().equals("21:30")) {
+            return 6;
+        } else if (b.GetStringHour().equals("22:00")) {
+            return 7;
+        } else if (b.GetStringHour().equals("22:30")) {
+            return 8;
+        } else if (b.GetStringHour().equals("23:00")) {
+            return 9;
+        } else if (b.GetStringHour().equals("23:30")) {
+            return 10;
+        } else if (b.GetStringHour().equals("00:00")) {
+            return 11;
+        } else {
+            return 0;
+        }
+    }
 }
