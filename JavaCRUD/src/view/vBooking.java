@@ -14,6 +14,7 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import model.Booking;
 import model.Tables.Table;
+import model.Tools.BookingHandler;
 import model.Tools.DateHandler;
 
 /**
@@ -30,6 +31,28 @@ public class vBooking extends javax.swing.JFrame {
     private DefaultTableModel model;
     private ArrayList<Table> listaMesas;
     private ArrayList<Table> dummyTableList;
+    
+    public vBooking() {
+        initComponents();
+        
+        this.dao = new daoBooking();
+        this.selectedReserva = new Booking();
+        this.gestor = new DateHandler();
+        this.listaMesas = new ArrayList<Table>();
+        this.model = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        
+        setLocationRelativeTo(null);
+        setTitle("Gestor de Reservas");
+       
+        this.createTableModel();
+        this.updateTable();
+        this.cleanInputs();
+    }  
     
     private void makeHintOnFocus(JTextField field, String toShowMessage) {
         if (field.getText().equals("")) {
@@ -50,40 +73,9 @@ public class vBooking extends javax.swing.JFrame {
         dummyTableList = new ArrayList<Table>();
                 
         this.insertTablesIntoDummyList();
-        for(Booking r : this.listaReservas) {
-            switch (r.GetMesa()) {
-                case 1 -> {
-                    System.out.println("Trying at 1");
-                    dummyTableList.get(0).updateBooking(r);
-                }
-                case 2 -> {
-                    System.out.println("Trying at 2");
-                    dummyTableList.get(1).updateBooking(r);
-                }
-                case 3 -> {
-                    System.out.println("Trying at 3");
-                    dummyTableList.get(2).updateBooking(r);
-                }
-                case 4 -> {
-                    System.out.println("Trying at 4");
-                    dummyTableList.get(3).updateBooking(r);
-                }
-                case 5 -> {             
-                    System.out.println("Trying at 5");
-                    dummyTableList.get(4).updateBooking(r);
-                }
-                case 6 -> {
-                    System.out.println("Trying at 6");
-                    dummyTableList.get(5).updateBooking(r);
-                }
-                default -> {
-                }
-            }
-        }
+        BookingHandler gestorReservas = new BookingHandler();
         
-        listaMesas = dummyTableList;
-        
-        System.out.println("Bookings Handled");
+        listaMesas = gestorReservas.insertBookingsIntoTables(dummyTableList, listaReservas);
     }
     
     private ArrayList<Table> filterTables( ArrayList<Table> toFilterList, int value) 
@@ -227,27 +219,7 @@ public class vBooking extends javax.swing.JFrame {
         return 0;
     }    
   
-    public vBooking() {
-        initComponents();
-        
-        this.dao = new daoBooking();
-        this.selectedReserva = new Booking();
-        this.gestor = new DateHandler();
-        this.listaMesas = new ArrayList<Table>();
-        this.model = new DefaultTableModel() {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-        
-        setLocationRelativeTo(null);
-        setTitle("Gestor de Reservas");
-       
-        this.createTableModel();
-        this.updateTable();
-        this.cleanInputs();
-    }
+    
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
