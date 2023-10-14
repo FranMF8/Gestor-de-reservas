@@ -128,7 +128,7 @@ public class Table implements Comparable<Table> {
     }
     
     public void listBooking(Booking b) {
-        
+        //A cambiar para buscar por ID
         System.out.println("Mesa: " + this.getID());
         System.out.println("ID: " + b.GetID());
         System.out.println("Nombre: " + b.GetNombre());

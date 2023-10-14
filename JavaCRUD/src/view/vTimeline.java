@@ -9,8 +9,6 @@ import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
@@ -43,17 +41,16 @@ public class vTimeline extends javax.swing.JFrame {
         this.setSize(1300, 500); 
         this.setResizable(false);
         
-        gridRows = new JPanel[7][];//Each row contains every column
+        gridRows = new JPanel[7][]; //Each row contains every column
         colorGenerator = new ColorHandler();
         listaMesas = new ArrayList<Table>();
         dummyTableList = new ArrayList<Table>();
         listaReservas = new ArrayList<Booking>();
         dao = new daoBooking();
         gestorReservas = new BookingHandler();
-        
-        
+              
         updateBookings();
-        Grid.setLayout(new GridLayout(7, 12));
+        Grid.setLayout(new GridLayout(7, 15));
         PaintGrid();       
     }
     
@@ -62,6 +59,7 @@ public class vTimeline extends javax.swing.JFrame {
     private void PaintGrid() {
         int rowIndex = 0;
         boolean painted = false;
+        
         for (JPanel[] row : gridRows) {
             int columnIndex = 0;
             boolean isfirstRow = false;
@@ -69,7 +67,7 @@ public class vTimeline extends javax.swing.JFrame {
                 
                 isfirstRow = true;
             }
-            row = new JPanel[12];
+            row = new JPanel[15];
              Color rndmClr = colorGenerator.generateRandomColor();
              int max = 0;
             for (JPanel column : row) {  
@@ -122,8 +120,7 @@ public class vTimeline extends javax.swing.JFrame {
     private void handleBookings() {
         dummyTableList = new ArrayList<Table>();
         
-        this.insertTablesIntoDummyList();    
-        
+        this.insertTablesIntoDummyList();            
         
         listaMesas = gestorReservas.insertBookingsIntoTables(dummyTableList, listaReservas);      
     }
@@ -189,7 +186,13 @@ public class vTimeline extends javax.swing.JFrame {
             hour.setText("23:30");
         } else if (i == 11) {
             hour.setText("00:00");           
-        }  
+        }  else if (i == 12) {
+            hour.setText("00:30");
+        } else if (i == 13) {
+            hour.setText("01:00");
+        } else if (i == 14) {
+            hour.setText("01:30");
+        }
         row.setLayout(new GridBagLayout());
         row.add(hour, new GridBagConstraints());
     }
