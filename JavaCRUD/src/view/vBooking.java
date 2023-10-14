@@ -436,6 +436,7 @@ public class vBooking extends javax.swing.JFrame {
         while(updated == 0) {
             updated = update();
         }
+        this.cleanInputs();
     }//GEN-LAST:event_UpdateButtonActionPerformed
 
     private void DeleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteButtonActionPerformed
@@ -495,6 +496,7 @@ public class vBooking extends javax.swing.JFrame {
                 this.updateTable();
                 JOptionPane.showMessageDialog(null, "Agregado correctamente.");
             }
+            this.cleanInputs();
         } catch(Exception e) {
             JOptionPane.showMessageDialog(null, "ERROR");
             e.printStackTrace();
