@@ -29,7 +29,7 @@ public class vTimeline extends javax.swing.JFrame {
     private ArrayList<Booking> listaReservas;
     private daoBooking dao;
     BookingHandler gestorReservas;
-    boolean painted = false;
+    
        
     public vTimeline() {
         initComponents();    
@@ -41,7 +41,7 @@ public class vTimeline extends javax.swing.JFrame {
         listaReservas = new ArrayList<Booking>();
         dao = new daoBooking();
         gestorReservas = new BookingHandler();
-        painted = false;
+        
         
         updateBookings();
         Grid.setLayout(new GridLayout(7, 12));
@@ -52,6 +52,7 @@ public class vTimeline extends javax.swing.JFrame {
     
     private void PaintGrid() {
         int rowIndex = 0;
+        boolean painted = false;
         for (JPanel[] row : gridRows) {
             int columnIndex = 0;
             boolean isfirstRow = false;
@@ -61,6 +62,7 @@ public class vTimeline extends javax.swing.JFrame {
             }
             row = new JPanel[12];
              Color rndmClr = colorGenerator.generateRandomColor();
+             int max = 0;
             for (JPanel column : row) {  
                 
                 column = new JPanel();
@@ -79,11 +81,20 @@ public class vTimeline extends javax.swing.JFrame {
                         column.add(table, new GridBagConstraints());
                     }
                 } else {
-                    
                     painted = paintBookings(rndmClr, column, columnIndex, rowIndex);
+
+                    if (max != 0) {
+                        painted = true;
+                    } 
+                    
                     if (painted) {
-                        System.out.println("Fila: " + rowIndex);
-                        System.out.println("Columna: " + columnIndex);
+                        if (max < 4) {                         
+                            column.setBackground(rndmClr);
+                            max++;
+                        } else {
+                            painted = false;
+                            max = 0;
+                        }                 
                     }
                 }
                 Grid.add(column);
@@ -122,20 +133,7 @@ public class vTimeline extends javax.swing.JFrame {
                 if (!b.equals(null)) {             
                     
                 if (b.GetMesa() == rowIndex && gestorReservas.getHourIndex(b) == columnIndex) {
-                    
-                    
-                    System.out.println("Indice Hora: " + gestorReservas.getHourIndex(b));
-                        System.out.println("Indice fila: " + columnIndex);
-                        System.out.println();
-                        System.out.println();
-                        System.out.println();
-                        System.out.println("Indice Mesa: " + b.GetMesa());
-                        System.out.println("Indice columna: " + rowIndex);
-                        System.out.println();
-                        System.out.println();
-                        System.out.println();
-                        
-                        
+
                     panel.setBackground(clr);                 
                     return true;
                 }
