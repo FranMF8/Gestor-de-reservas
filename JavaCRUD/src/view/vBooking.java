@@ -31,6 +31,28 @@ public class vBooking extends javax.swing.JFrame {
     private ArrayList<Table> listaMesas;
     private ArrayList<Table> dummyTableList;
     
+    public vBooking() {
+        initComponents();
+        
+        this.dao = new daoBooking();
+        this.selectedReserva = new Booking();
+        this.gestor = new DateHandler();
+        this.listaMesas = new ArrayList<Table>();
+        this.model = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        
+        setLocationRelativeTo(null);
+        setTitle("Gestor de Reservas");
+       
+        this.createTableModel();
+        this.updateTable();
+        this.cleanInputs();
+    }  
+    
     private void makeHintOnFocus(JTextField field, String toShowMessage) {
         if (field.getText().equals("")) {
             field.setText(toShowMessage);
@@ -227,27 +249,7 @@ public class vBooking extends javax.swing.JFrame {
         return 0;
     }    
   
-    public vBooking() {
-        initComponents();
-        
-        this.dao = new daoBooking();
-        this.selectedReserva = new Booking();
-        this.gestor = new DateHandler();
-        this.listaMesas = new ArrayList<Table>();
-        this.model = new DefaultTableModel() {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-        
-        setLocationRelativeTo(null);
-        setTitle("Gestor de Reservas");
-       
-        this.createTableModel();
-        this.updateTable();
-        this.cleanInputs();
-    }
+    
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents

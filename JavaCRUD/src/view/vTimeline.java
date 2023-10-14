@@ -13,27 +13,38 @@ import model.Tools.ColorHandler;
 
 public class vTimeline extends javax.swing.JFrame {
     
-    JPanel[][] gridRows = new JPanel[6][]; //Each row contains every column
+    JPanel[][] gridRows = new JPanel[7][]; //Each row contains every column
     ColorHandler colorGenerator = new ColorHandler();
     
     public vTimeline() {
         initComponents();
         
         
-        Grid.setLayout(new GridLayout(6, 11));
-        
+        Grid.setLayout(new GridLayout(7, 12));
+        int j = 0;
         for (JPanel[] column : gridRows) {
+            int i = 0;
+            boolean paintWhite = false;
+            if (j == 0) {
+                paintWhite = true;
+            }
             column = new JPanel[11];
              Color rndmClr = colorGenerator.generateRandomColor();
             
             for (JPanel row : column) {  
-               
+                
                 row = new JPanel();
                 Border blackline = BorderFactory.createLineBorder(Color.black);
-                row.setBackground(rndmClr);
-                row.setBorder(blackline);
+                row.setBackground(rndmClr);            
+                
+                if (i == 0 || paintWhite) {
+                    row.setBackground(colorGenerator.createColor(255, 255, 255));
+                    row.setBorder(blackline);
+                }
                 Grid.add(row);
+                i++;
             }
+            j++;
         }        
     }
     
