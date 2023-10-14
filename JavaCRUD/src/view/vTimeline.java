@@ -5,7 +5,6 @@
 package view;
 
 import dao.daoBooking;
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -87,11 +86,17 @@ public class vTimeline extends javax.swing.JFrame {
                         painted = true;
                     } 
                     
-                    if (painted) {
+                    if (painted) {                        
                         if (max < 4) {                         
                             column.setBackground(rndmClr);
                             max++;
+                            if (max >= 4) {
+                                rndmClr = colorGenerator.generateRandomColor();
+                                painted = false;
+                                max = 0;
+                            }
                         } else {
+                            rndmClr = colorGenerator.generateRandomColor();
                             painted = false;
                             max = 0;
                         }                 
@@ -134,6 +139,12 @@ public class vTimeline extends javax.swing.JFrame {
                     
                 if (b.GetMesa() == rowIndex && gestorReservas.getHourIndex(b) == columnIndex) {
 
+                    JLabel name = new JLabel();
+                    name.setOpaque(true);
+                    name.setForeground(colorGenerator.createColor(0, 0, 0));
+                    name.setBorder(BorderFactory.createLineBorder(Color.black));
+                    name.setText(b.GetNombre());
+                    panel.add(name);
                     panel.setBackground(clr);                 
                     return true;
                 }
@@ -172,6 +183,7 @@ public class vTimeline extends javax.swing.JFrame {
         row.setLayout(new GridBagLayout());
         row.add(hour, new GridBagConstraints());
     }
+    
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
