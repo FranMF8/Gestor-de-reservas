@@ -17,7 +17,7 @@ public class Table implements Comparable<Table> {
     private int ID;
     private String state;
     private int quantity;
-    private ArrayList<Booking> bookings;
+    public ArrayList<Booking> bookings;
     
     public Table(int cantidad, int id) {
         

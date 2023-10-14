@@ -27,10 +27,11 @@ public class Booking {
         this.mesa = table;
         this.hora = hour;
         this.personas = people;
+        this.gestorDeFechas = new DateHandler();
     }
     
     public Booking() {
-        
+        this.gestorDeFechas = new DateHandler();
     }
     ///////////Getters & Setters///////////
     
