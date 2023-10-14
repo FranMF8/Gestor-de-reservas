@@ -17,10 +17,15 @@ public class vTimeline extends javax.swing.JFrame {
     ColorHandler colorGenerator = new ColorHandler();
     
     public vTimeline() {
-        initComponents();
-        
+        initComponents();       
         
         Grid.setLayout(new GridLayout(7, 12));
+        PaintGrid();       
+    }
+    
+    //Methods
+    
+    private void PaintGrid() {
         int j = 0;
         for (JPanel[] column : gridRows) {
             int i = 0;
@@ -34,18 +39,19 @@ public class vTimeline extends javax.swing.JFrame {
             for (JPanel row : column) {  
                 
                 row = new JPanel();
-                Border blackline = BorderFactory.createLineBorder(Color.black);
-                row.setBackground(rndmClr);            
+                Border blackline = BorderFactory.createLineBorder(Color.black);                         
                 
                 if (i == 0 || paintWhite) {
                     row.setBackground(colorGenerator.createColor(255, 255, 255));
                     row.setBorder(blackline);
+                } else {
+                    row.setBackground(rndmClr);   
                 }
                 Grid.add(row);
                 i++;
             }
             j++;
-        }        
+        } 
     }
     
     @SuppressWarnings("unchecked")
