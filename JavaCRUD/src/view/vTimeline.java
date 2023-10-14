@@ -32,6 +32,8 @@ public class vTimeline extends javax.swing.JFrame {
        
     public vTimeline() {
         initComponents();    
+        this.setTitle("Timeline");
+        this.setSize(1500, 600);       
         
         gridRows = new JPanel[7][];//Each row contains every column
         colorGenerator = new ColorHandler();

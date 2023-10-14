@@ -34,6 +34,7 @@ public class vBooking extends javax.swing.JFrame {
     
     public vBooking() {
         initComponents();
+        this.setTitle("Gestor de reservas");
         
         this.dao = new daoBooking();
         this.selectedReserva = new Booking();
