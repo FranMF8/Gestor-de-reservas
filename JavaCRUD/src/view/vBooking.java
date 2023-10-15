@@ -36,7 +36,6 @@ public class vBooking extends javax.swing.JFrame {
     
     public vBooking() {
         initComponents();
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         
         this.dao = new daoBooking();
         this.selectedReserva = new Booking();
@@ -130,7 +129,7 @@ public class vBooking extends javax.swing.JFrame {
                     return 1;
                 }
                 else {
-                dao.insertBooking(reservaGuardada);
+                dao.deleteAndReAdd(reservaGuardada);
                 this.updateTable();
                 JOptionPane.showMessageDialog(null, "No fue posible actualizar la reserva.");
                 counter = 0;

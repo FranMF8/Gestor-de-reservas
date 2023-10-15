@@ -33,17 +33,12 @@ public class daoBooking {
         PreparedStatement ps = null;
         DateHandler gestor = new DateHandler();
         try {
-            ps = con.Connect().prepareStatement("INSERT INTO Reservas VALUES(?,?,?,?,?)");
-            
-            if (reserva.GetID() == 0) {
-                ps.setInt(1, 0);
-            } else {
-                ps.setInt(1, reserva.GetID());
-            }     
-            ps.setString(2, reserva.GetNombre());
-            ps.setInt(3, reserva.GetMesa());
-            ps.setString(4, gestor.formatFromLDT(reserva.GetHora()));
-            ps.setInt(5, reserva.GetPersonas());
+            ps = con.Connect().prepareStatement("INSERT INTO Reservas VALUES(null,?,?,?,?)");
+ 
+            ps.setString(1, reserva.GetNombre());
+            ps.setInt(2, reserva.GetMesa());
+            ps.setString(3, gestor.formatFromLDT(reserva.GetHora()));
+            ps.setInt(4, reserva.GetPersonas());
             ps.executeUpdate();
             con.Disconnect();
             return true;          
