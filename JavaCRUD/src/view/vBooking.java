@@ -37,7 +37,6 @@ public class vBooking extends javax.swing.JFrame {
     public vBooking() {
         initComponents();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        this.setTitle("Gestor de reservas");
         
         this.dao = new daoBooking();
         this.selectedReserva = new Booking();
@@ -84,8 +83,7 @@ public class vBooking extends javax.swing.JFrame {
     }
     
     private ArrayList<Table> filterTables( ArrayList<Table> toFilterList, int value) 
-    {
-        
+    {      
         ArrayList<Table> filteredList = new ArrayList<Table>();
         
         for( Table t: toFilterList) {
@@ -195,8 +193,7 @@ public class vBooking extends javax.swing.JFrame {
             
             model.addRow(reserva);
         }
-        BookingsTable.setModel(model);
-        
+        BookingsTable.setModel(model);       
     }
     
     public void createTableModel() {
@@ -212,20 +209,17 @@ public class vBooking extends javax.swing.JFrame {
             if (m.checkTableState(r)) {      
                 return m.getID();
             }
-        }
-        
+        }     
         return 0;
     }
     
-    public int replaceTableID(List<Table> mesasFiltradas, Booking r, int id) {
-        
+    public int replaceTableID(List<Table> mesasFiltradas, Booking r, int id) {       
         for(Table m: mesasFiltradas) {
             if (m.checkTableState(r)) {                         
                 m.changeBookingValue(id, r);
                 return m.getID();
             }
-        }
-        
+        }    
         return 0;
     }    
   
@@ -517,8 +511,7 @@ public class vBooking extends javax.swing.JFrame {
     private void BookingsTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BookingsTableMouseClicked
         fila = BookingsTable.getSelectedRow();
         
-        this.selectedReserva = listaReservas.get(fila);
-        
+        this.selectedReserva = listaReservas.get(fila);       
         
         IDOutputLabel.setText("" + selectedReserva.GetID());
         TableOutputLabel.setText("" + selectedReserva.GetMesa());
