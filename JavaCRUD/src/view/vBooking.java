@@ -245,10 +245,13 @@ public class vBooking extends javax.swing.JFrame {
         BookingsTable = new javax.swing.JTable();
         TableOutputLabel = new javax.swing.JLabel();
         TableLabel = new javax.swing.JLabel();
+        searchButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setLocation(new java.awt.Point(700, 300));
 
         openTimelineButton.setText("Ver reservas");
+        openTimelineButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         openTimelineButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 openTimelineButtonActionPerformed(evt);
@@ -346,6 +349,14 @@ public class vBooking extends javax.swing.JFrame {
         TableLabel.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         TableLabel.setText("Mesa:");
 
+        searchButton.setText("Buscar reserva");
+        searchButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        searchButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -380,7 +391,10 @@ public class vBooking extends javax.swing.JFrame {
                         .addComponent(TableLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(TableOutputLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(openTimelineButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(openTimelineButton, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(searchButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGap(49, 49, 49)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 727, Short.MAX_VALUE)
                 .addContainerGap())
@@ -395,7 +409,9 @@ public class vBooking extends javax.swing.JFrame {
                         .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
                         .addGap(20, 20, 20)
-                        .addComponent(openTimelineButton, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(openTimelineButton, javax.swing.GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE)
+                            .addComponent(searchButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(IDLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -549,6 +565,11 @@ public class vBooking extends javax.swing.JFrame {
         vTimeline timeline = new vTimeline();
         timeline.setVisible(true);
     }//GEN-LAST:event_openTimelineButtonActionPerformed
+
+    private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
+        vSearch search = new vSearch();
+        search.setVisible(true);
+    }//GEN-LAST:event_searchButtonActionPerformed
     
     /**
      * @param args the command line arguments
@@ -605,5 +626,6 @@ public class vBooking extends javax.swing.JFrame {
     private javax.swing.JButton UpdateButton;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton openTimelineButton;
+    private javax.swing.JButton searchButton;
     // End of variables declaration//GEN-END:variables
 }

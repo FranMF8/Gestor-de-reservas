@@ -132,4 +132,31 @@ public class daoBooking {
         con.Disconnect();
         return lista;
     }
+    
+    public Booking getByID(int id) {
+        Booking reserva = new Booking();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        DateHandler gestor = new DateHandler();
+        
+        try {
+            ps = con.Connect().prepareStatement("SELECT * From Reservas WHERE id=?");
+            ps.setInt(1, id);
+            rs = ps.executeQuery();
+            
+            if (rs.next()) {
+                reserva = new Booking(
+                rs.getInt("ID"),
+                rs.getString("Nombre"),
+                rs.getInt("Mesa"),
+                gestor.formatFromString(rs.getString("Hora")),
+                rs.getInt("Personas")
+                );
+                return reserva;
+            }
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+        return null; 
+    }
 }
