@@ -17,7 +17,6 @@ import javax.swing.Action;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.table.DefaultTableModel;
 import model.Booking;
@@ -61,14 +60,7 @@ public class vBooking extends javax.swing.JFrame {
         counter = 0;
         
         setTitle("Gestor de Reservas");
-        NameTextField.addKeyListener(new KeyAdapter() {
-        @Override
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    AddButtonActionPerformed(null);
-                }
-            }
-        });
+
         
         BookingsTable.addKeyListener(new KeyAdapter() {
         @Override
