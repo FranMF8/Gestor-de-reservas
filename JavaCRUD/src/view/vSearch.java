@@ -5,6 +5,8 @@
 package view;
 
 import dao.daoBooking;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
 import model.Booking;
 import model.Tools.DateHandler;
@@ -29,10 +31,18 @@ public class vSearch extends javax.swing.JFrame {
         clearOutputs();
         this.setTitle("Buscar reserva");
         outputPanel.setVisible(false);
+        
+        idInputText.addKeyListener(new KeyAdapter() {
+        @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    getByID();
+                }
+            }
+        });
     }
 
     private void clearOutputs() {
-        outputPanel.setVisible(true);
             idOutputLabel.setText("");
             tableOutputLabel.setText("");
             nameOutputLabel.setText("");
@@ -40,6 +50,23 @@ public class vSearch extends javax.swing.JFrame {
             peopleOutputLabel.setText("");
             gestorAtajos.makeHintOnFocus(idInputText, "Ingrese un id...");
     }
+    private void getByID() {
+        Booking actualBooking = new Booking();
+        actualBooking = dao.getByID(Integer.parseInt(idInputText.getText()));
+        if (actualBooking == null) {
+            outputPanel.setVisible(false);
+            JOptionPane.showMessageDialog(null, "Reserva no encontrada");
+            clearOutputs();               
+        } else {
+            outputPanel.setVisible(true);
+            idOutputLabel.setText("" + actualBooking.GetID());
+            tableOutputLabel.setText("" + actualBooking.GetMesa());
+            nameOutputLabel.setText(actualBooking.GetNombre());
+            dateTimeOutputLabel.setText(gestorHora.formatFromLDT(actualBooking.GetHora()));
+            peopleOutputLabel.setText("" + actualBooking.GetPersonas());
+        }   
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -242,20 +269,7 @@ public class vSearch extends javax.swing.JFrame {
     }//GEN-LAST:event_idInputTextActionPerformed
 
     private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
-        Booking actualBooking = new Booking();
-        actualBooking = dao.getByID(Integer.parseInt(idInputText.getText()));
-        if (actualBooking == null) {
-            JOptionPane.showMessageDialog(null, "Reserva no encontrada");
-            clearOutputs();
-            outputPanel.setVisible(false);
-        } else {
-            outputPanel.setVisible(true);
-            idOutputLabel.setText("" + actualBooking.GetID());
-            tableOutputLabel.setText("" + actualBooking.GetMesa());
-            nameOutputLabel.setText(actualBooking.GetNombre());
-            dateTimeOutputLabel.setText(gestorHora.formatFromLDT(actualBooking.GetHora()));
-            peopleOutputLabel.setText("" + actualBooking.GetPersonas());
-        }     
+        getByID();
     }//GEN-LAST:event_searchButtonActionPerformed
 
     private void quitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quitButtonActionPerformed
