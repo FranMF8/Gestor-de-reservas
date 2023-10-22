@@ -41,7 +41,7 @@ public class vSearch extends javax.swing.JFrame {
         @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    getByID();
+                    searchButtonActionPerformed(null);
                 }
             }
         });
@@ -49,7 +49,7 @@ public class vSearch extends javax.swing.JFrame {
         Action enterAction = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                getByID();
+                searchButtonActionPerformed(null);
             }
         };
         
@@ -66,7 +66,7 @@ public class vSearch extends javax.swing.JFrame {
             peopleOutputLabel.setText("");
             gestorAtajos.makeHintOnFocus(idInputText, "Ingrese un id...");
     }
-    private void getByID() {
+    public void getByID() {
         Booking actualBooking = new Booking();
         actualBooking = dao.getByID(Integer.parseInt(idInputText.getText()));
         if (actualBooking == null) {

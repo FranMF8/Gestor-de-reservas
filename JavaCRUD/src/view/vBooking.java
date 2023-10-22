@@ -6,12 +6,19 @@ package view;
 
 import dao.daoBooking;
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.table.DefaultTableModel;
 import model.Booking;
 import model.Tables.Table;
@@ -54,6 +61,34 @@ public class vBooking extends javax.swing.JFrame {
         
         setLocationRelativeTo(null);
         setTitle("Gestor de Reservas");
+        NameTextField.addKeyListener(new KeyAdapter() {
+        @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    AddButtonActionPerformed(null);
+                }
+            }
+        });
+        
+        BookingsTable.addKeyListener(new KeyAdapter() {
+        @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_DELETE) {
+                    DeleteButtonActionPerformed(null);
+                }
+            }
+        });
+        
+        Action enterAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                AddButtonActionPerformed(null);
+            }
+        };
+        
+        NameTextField.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+            .put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "enterAction");
+        NameTextField.getActionMap().put("enterAction", enterAction);
        
         this.createTableModel();
         this.updateTable();
