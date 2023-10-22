@@ -45,6 +45,7 @@ public class vBooking extends javax.swing.JFrame {
     
     public vBooking() {
         initComponents();
+        this.setSize(800, 480); 
         
         this.dao = new daoBooking();
         this.selectedReserva = new Booking();
@@ -59,7 +60,6 @@ public class vBooking extends javax.swing.JFrame {
         };
         counter = 0;
         
-        setLocationRelativeTo(null);
         setTitle("Gestor de Reservas");
         NameTextField.addKeyListener(new KeyAdapter() {
         @Override
@@ -94,21 +94,6 @@ public class vBooking extends javax.swing.JFrame {
         this.updateTable();
         this.cleanInputs();
     }  
-    
-    private void makeHintOnFocus(JTextField field, String toShowMessage) {
-        if (field.getText().equals("")) {
-            field.setText(toShowMessage);
-            field.setForeground(new Color(115, 113, 112));
-            this.CancelButton.setEnabled(false);
-        }
-    }
-    
-    private void quitHintOnFocus(JTextField field, String toShowMessage) {
-        if (field.getText().equals(toShowMessage)) {
-            field.setText("");
-            field.setForeground(new Color(0, 0, 0));
-        }
-    }
     
     private void handleBookings() {
         dummyTableList = new ArrayList<Table>();
@@ -286,7 +271,8 @@ public class vBooking extends javax.swing.JFrame {
         searchButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setLocation(new java.awt.Point(700, 300));
+        setLocation(new java.awt.Point(600, 200));
+        setSize(new java.awt.Dimension(500, 300));
 
         openTimelineButton.setText("Ver reservas");
         openTimelineButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));

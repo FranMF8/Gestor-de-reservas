@@ -290,6 +290,8 @@ public class vSearch extends javax.swing.JFrame {
 
     private void quitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quitButtonActionPerformed
         outputPanel.setVisible(false);
+        idInputText.setText("");
+        clearOutputs();
     }//GEN-LAST:event_quitButtonActionPerformed
 
     private void idInputTextFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_idInputTextFocusGained

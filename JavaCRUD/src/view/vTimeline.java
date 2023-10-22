@@ -203,6 +203,7 @@ public class vTimeline extends javax.swing.JFrame {
         Grid = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setLocation(new java.awt.Point(1100, 300));
 
         javax.swing.GroupLayout GridLayout = new javax.swing.GroupLayout(Grid);
         Grid.setLayout(GridLayout);
