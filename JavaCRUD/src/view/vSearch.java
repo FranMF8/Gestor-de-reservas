@@ -8,6 +8,7 @@ import dao.daoBooking;
 import javax.swing.JOptionPane;
 import model.Booking;
 import model.Tools.DateHandler;
+import model.Tools.HintHandler;
 
 /**
  *
@@ -16,12 +17,14 @@ import model.Tools.DateHandler;
 public class vSearch extends javax.swing.JFrame {
     private daoBooking dao;
     private DateHandler gestorHora;
+    private HintHandler gestorAtajos;
     /**
      * Creates new form vSearch
      */
     public vSearch() {
         dao = new daoBooking();
         gestorHora = new DateHandler();
+        gestorAtajos = new HintHandler();
         initComponents();
         clearOutputs();
         this.setTitle("Buscar reserva");
@@ -35,6 +38,7 @@ public class vSearch extends javax.swing.JFrame {
             nameOutputLabel.setText("");
             dateTimeOutputLabel.setText("");
             peopleOutputLabel.setText("");
+            gestorAtajos.makeHintOnFocus(idInputText, "Ingrese un id...");
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -68,6 +72,14 @@ public class vSearch extends javax.swing.JFrame {
         idInputLabel.setText("Ingrese ID de reserva");
 
         idInputText.setToolTipText("Ingrese un ID...");
+        idInputText.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                idInputTextFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                idInputTextFocusLost(evt);
+            }
+        });
         idInputText.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 idInputTextActionPerformed(evt);
@@ -250,6 +262,14 @@ public class vSearch extends javax.swing.JFrame {
         outputPanel.setVisible(false);
     }//GEN-LAST:event_quitButtonActionPerformed
 
+    private void idInputTextFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_idInputTextFocusGained
+        gestorAtajos.quitHintOnFocus(idInputText, "Ingrese un id...");
+    }//GEN-LAST:event_idInputTextFocusGained
+
+    private void idInputTextFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_idInputTextFocusLost
+        gestorAtajos.makeHintOnFocus(idInputText, "Ingrese un id...");
+    }//GEN-LAST:event_idInputTextFocusLost
+    
     /**
      * @param args the command line arguments
      */

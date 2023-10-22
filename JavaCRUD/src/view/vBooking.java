@@ -17,6 +17,7 @@ import model.Booking;
 import model.Tables.Table;
 import model.Tools.BookingHandler;
 import model.Tools.DateHandler;
+import model.Tools.HintHandler;
 
 /**
  *
@@ -32,6 +33,7 @@ public class vBooking extends javax.swing.JFrame {
     private DefaultTableModel model;
     private ArrayList<Table> listaMesas;
     private ArrayList<Table> dummyTableList;
+    private HintHandler gestorAtajos;
     private int counter;
     
     public vBooking() {
@@ -41,6 +43,7 @@ public class vBooking extends javax.swing.JFrame {
         this.selectedReserva = new Booking();
         this.gestor = new DateHandler();
         this.listaMesas = new ArrayList<Table>();
+        this.gestorAtajos = new HintHandler();
         this.model = new DefaultTableModel() {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -172,7 +175,7 @@ public class vBooking extends javax.swing.JFrame {
         UpdateButton.setEnabled(false);
         CancelButton.setEnabled(false);
 
-        this.makeHintOnFocus(NameTextField, "Ingrese nombre...");
+        gestorAtajos.makeHintOnFocus(NameTextField, "Ingrese nombre...");
         this.selectedReserva = new Booking();    
     }
     
@@ -547,13 +550,13 @@ public class vBooking extends javax.swing.JFrame {
     }//GEN-LAST:event_HourInputActionPerformed
 
     private void NameTextFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_NameTextFieldFocusGained
-        this.quitHintOnFocus(NameTextField, "Ingrese nombre...");
+        gestorAtajos.quitHintOnFocus(NameTextField, "Ingrese nombre...");
         this.CancelButton.setEnabled(true);
         this.CancelButton.setFocusPainted(true);
     }//GEN-LAST:event_NameTextFieldFocusGained
 
     private void NameTextFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_NameTextFieldFocusLost
-        this.makeHintOnFocus(NameTextField, "Ingrese nombre...");
+        gestorAtajos.makeHintOnFocus(NameTextField, "Ingrese nombre...");
         this.CancelButton.setFocusPainted(false);
     }//GEN-LAST:event_NameTextFieldFocusLost
 
