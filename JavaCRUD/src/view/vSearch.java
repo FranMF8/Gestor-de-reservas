@@ -5,9 +5,14 @@
 package view;
 
 import dao.daoBooking;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.JComponent;
 import javax.swing.JOptionPane;
+import javax.swing.KeyStroke;
 import model.Booking;
 import model.Tools.DateHandler;
 import model.Tools.HintHandler;
@@ -40,6 +45,17 @@ public class vSearch extends javax.swing.JFrame {
                 }
             }
         });
+        
+        Action enterAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getByID();
+            }
+        };
+        
+        this.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+            .put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "enterAction");
+        this.getRootPane().getActionMap().put("enterAction", enterAction);
     }
 
     private void clearOutputs() {
