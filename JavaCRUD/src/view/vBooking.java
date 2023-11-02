@@ -114,7 +114,7 @@ public class vBooking extends javax.swing.JFrame {
             
             ArrayList<Table> mesasFiltradas = this.filterTables(listaMesas, personas);
             
-            int mesa = this.replaceTableID(mesasFiltradas, reserva, id);
+            int mesa = this.returnTableID(mesasFiltradas, reserva);
      
             
             if (mesa == 0) {
@@ -210,19 +210,7 @@ public class vBooking extends javax.swing.JFrame {
             }
         }     
         return 0;
-    }
-    
-    public int replaceTableID(List<Table> mesasFiltradas, Booking r, int id) {       
-        for(Table m: mesasFiltradas) {
-            if (m.checkTableState(r)) {                         
-                m.changeBookingValue(id, r);
-                return m.getID();
-            }
-        }    
-        return 0;
-    }    
-  
-    
+    }  
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
