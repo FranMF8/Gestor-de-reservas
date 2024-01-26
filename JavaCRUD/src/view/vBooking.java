@@ -24,6 +24,7 @@ import model.Tables.Table;
 import model.Tools.BookingHandler;
 import model.Tools.DateHandler;
 import model.Tools.HintHandler;
+import model.Tools.PDFHandler;
 
 /**
  *
@@ -41,6 +42,7 @@ public class vBooking extends javax.swing.JFrame {
     private ArrayList<Table> dummyTableList;
     private HintHandler gestorAtajos;
     private int counter;
+    private PDFHandler PDFTool;
     
     public vBooking() {
         initComponents();
@@ -51,6 +53,7 @@ public class vBooking extends javax.swing.JFrame {
         this.gestor = new DateHandler();
         this.listaMesas = new ArrayList<Table>();
         this.gestorAtajos = new HintHandler();
+        this.PDFTool = new PDFHandler();
         this.model = new DefaultTableModel() {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -526,6 +529,9 @@ public class vBooking extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Agregado correctamente.");
             }
             this.cleanInputs();
+            
+            //this.PDFTool.CreatePDF(12);
+            
         } catch(Exception e) {
             JOptionPane.showMessageDialog(null, "ERROR");
             e.printStackTrace();
