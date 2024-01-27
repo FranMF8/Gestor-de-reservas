@@ -4,6 +4,7 @@
  */
 package model.Tables;
 
+import interfaces.IReservable;
 import java.util.ArrayList;
 import model.Booking;
 import model.Tools.DateHandler;
@@ -12,7 +13,7 @@ import model.Tools.DateHandler;
  *
  * @author cejit
  */
-public class Table implements Comparable<Table> {
+public class Table implements Comparable<Table>, IReservable {
     
     private int ID;
     private String state;
