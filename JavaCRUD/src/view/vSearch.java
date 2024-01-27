@@ -16,6 +16,7 @@ import javax.swing.KeyStroke;
 import model.Booking;
 import model.Tools.DateHandler;
 import model.Tools.HintHandler;
+import model.Tools.PDFHandler;
 
 /**
  *
@@ -25,6 +26,8 @@ public class vSearch extends javax.swing.JFrame {
     private daoBooking dao;
     private DateHandler gestorHora;
     private HintHandler gestorAtajos;
+    private PDFHandler gestorPDF;
+    private Booking globalBooking;
     /**
      * Creates new form vSearch
      */
@@ -32,6 +35,8 @@ public class vSearch extends javax.swing.JFrame {
         dao = new daoBooking();
         gestorHora = new DateHandler();
         gestorAtajos = new HintHandler();
+        gestorPDF = new PDFHandler();
+        globalBooking = new Booking();
         initComponents();
         clearOutputs();
         this.setTitle("Buscar reserva");
@@ -65,21 +70,23 @@ public class vSearch extends javax.swing.JFrame {
             dateTimeOutputLabel.setText("");
             peopleOutputLabel.setText("");
             gestorAtajos.makeHintOnFocus(idInputText, "Ingrese un id...");
+            this.globalBooking = new Booking();
     }
     public void getByID() {
         Booking actualBooking = new Booking();
         actualBooking = dao.getByID(Integer.parseInt(idInputText.getText()));
+        globalBooking = actualBooking;
         if (actualBooking == null) {
             outputPanel.setVisible(false);
             JOptionPane.showMessageDialog(null, "Reserva no encontrada");
             clearOutputs();               
         } else {
             outputPanel.setVisible(true);
-            idOutputLabel.setText("" + actualBooking.GetID());
-            tableOutputLabel.setText("" + actualBooking.GetMesa());
-            nameOutputLabel.setText(actualBooking.GetNombre());
+            idOutputLabel.setText("" + globalBooking.GetID());
+            tableOutputLabel.setText("" + globalBooking.GetMesa());
+            nameOutputLabel.setText(globalBooking.GetNombre());
             dateTimeOutputLabel.setText(gestorHora.formatFromLDT(actualBooking.GetHora()));
-            peopleOutputLabel.setText("" + actualBooking.GetPersonas());
+            peopleOutputLabel.setText("" + globalBooking.GetPersonas());
         }   
     }
     
@@ -103,6 +110,7 @@ public class vSearch extends javax.swing.JFrame {
         dateTimeOutputLabel = new javax.swing.JLabel();
         peopleLabel = new javax.swing.JLabel();
         peopleOutputLabel = new javax.swing.JLabel();
+        PrintButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setLocation(new java.awt.Point(700, 300));
@@ -192,6 +200,13 @@ public class vSearch extends javax.swing.JFrame {
 
         peopleOutputLabel.setText("texto");
 
+        PrintButton.setText("Imprimir");
+        PrintButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                PrintButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout outputPanelLayout = new javax.swing.GroupLayout(outputPanel);
         outputPanel.setLayout(outputPanelLayout);
         outputPanelLayout.setHorizontalGroup(
@@ -206,7 +221,10 @@ public class vSearch extends javax.swing.JFrame {
                             .addComponent(peopleLabel))
                         .addGap(22, 22, 22)
                         .addGroup(outputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(peopleOutputLabel)
+                            .addGroup(outputPanelLayout.createSequentialGroup()
+                                .addComponent(peopleOutputLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(PrintButton))
                             .addComponent(nameOutputLabel)
                             .addComponent(dateTimeOutputLabel)))
                     .addGroup(outputPanelLayout.createSequentialGroup()
@@ -238,22 +256,27 @@ public class vSearch extends javax.swing.JFrame {
                         .addContainerGap()
                         .addComponent(quitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)))
-                .addGroup(outputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tableLabel)
-                    .addComponent(tableOutputLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(outputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(nameLabel)
-                    .addComponent(nameOutputLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(outputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(dateTimeLabel)
-                    .addComponent(dateTimeOutputLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(outputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(peopleLabel)
-                    .addComponent(peopleOutputLabel))
-                .addGap(20, 20, 20))
+                .addGroup(outputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(outputPanelLayout.createSequentialGroup()
+                        .addGroup(outputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(tableLabel)
+                            .addComponent(tableOutputLabel))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(outputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(nameLabel)
+                            .addComponent(nameOutputLabel))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(outputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(dateTimeLabel)
+                            .addComponent(dateTimeOutputLabel))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(outputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(peopleLabel)
+                            .addComponent(peopleOutputLabel))
+                        .addGap(20, 20, 20))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, outputPanelLayout.createSequentialGroup()
+                        .addComponent(PrintButton)
+                        .addContainerGap())))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -291,6 +314,7 @@ public class vSearch extends javax.swing.JFrame {
     private void quitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quitButtonActionPerformed
         outputPanel.setVisible(false);
         idInputText.setText("");
+        
         clearOutputs();
     }//GEN-LAST:event_quitButtonActionPerformed
 
@@ -301,6 +325,14 @@ public class vSearch extends javax.swing.JFrame {
     private void idInputTextFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_idInputTextFocusLost
         gestorAtajos.makeHintOnFocus(idInputText, "Ingrese un id...");
     }//GEN-LAST:event_idInputTextFocusLost
+
+    private void PrintButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PrintButtonActionPerformed
+        if (gestorPDF.PrintBooking(globalBooking)) {
+            JOptionPane.showMessageDialog(null, "Reserva: " + globalBooking.GetID() + " impresa correctamente");
+        } else {
+            JOptionPane.showMessageDialog(null, "Error al imprimir la reserva");
+        }
+    }//GEN-LAST:event_PrintButtonActionPerformed
     
     /**
      * @param args the command line arguments
@@ -338,6 +370,7 @@ public class vSearch extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton PrintButton;
     private javax.swing.JLabel dateTimeLabel;
     private javax.swing.JLabel dateTimeOutputLabel;
     private javax.swing.JLabel idInputLabel;
