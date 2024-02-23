@@ -55,7 +55,7 @@ public class vTimeline extends javax.swing.JFrame {
     }
     
     //Methods
-    
+    //Se encarga de la logica de crear la grilla en la que se pintaran las reservas
     private void PaintGrid() {
         int rowIndex = 0;
         boolean painted = false;
@@ -88,6 +88,7 @@ public class vTimeline extends javax.swing.JFrame {
                         column.add(table, new GridBagConstraints());
                     }
                 } else {
+                    //Se encarga de pintar las reservas
                     painted = paintBookings(rndmClr, column, columnIndex, rowIndex);
 
                     if (max != 0) {
@@ -116,7 +117,7 @@ public class vTimeline extends javax.swing.JFrame {
             rowIndex++;
         } 
     }
-    
+    //Gestiona las reservas insertandolas en sus respectivas mesas
     private void handleBookings() {
         dummyTableList = new ArrayList<Table>();
         
@@ -124,7 +125,7 @@ public class vTimeline extends javax.swing.JFrame {
         
         listaMesas = gestorReservas.insertBookingsIntoTables(dummyTableList, listaReservas);      
     }
-    
+    //Crea las mesas
     private void insertTablesIntoDummyList() {
         this.dummyTableList.add(new Table(2, 1));
         this.dummyTableList.add(new Table(2, 2));
@@ -134,11 +135,12 @@ public class vTimeline extends javax.swing.JFrame {
         this.dummyTableList.add(new Table(6, 6));
     }
     
+    //Solicita las reservas a la BDD
     private void updateBookings() {
         listaReservas = dao.consultBookings();
         this.handleBookings();
     }
-    
+    //Se encarga de pintar individualmente las reservas en la grilla
     private boolean paintBookings(Color clr, JPanel panel, int columnIndex, int rowIndex) {
         for(Table t : listaMesas) {
             for(Booking b : t.bookings) {
@@ -161,7 +163,7 @@ public class vTimeline extends javax.swing.JFrame {
         panel.setBackground(colorGenerator.createColor(255, 255, 255));  
         return false;
     }
-    
+    //Gestiona como se pintan las casillas superiores de hora en la grilla
     private void addHourLabels(JPanel row, int i) {
         JLabel hour = new JLabel();
         if (i == 1) {

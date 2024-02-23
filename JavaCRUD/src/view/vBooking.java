@@ -44,16 +44,20 @@ public class vBooking extends javax.swing.JFrame {
     private int counter;
     private PDFHandler PDFTool;
     
+    
+    //Inicia la vista
     public vBooking() {
         initComponents();
         this.setSize(800, 480); 
-        
+        //Inicializa los objetos
         this.dao = new daoBooking();
         this.selectedReserva = new Booking();
         this.gestor = new DateHandler();
         this.listaMesas = new ArrayList<Table>();
         this.gestorAtajos = new HintHandler();
         this.PDFTool = new PDFHandler();
+        
+        //Hace que las celdas de la tabla no sean editables por el usuario
         this.model = new DefaultTableModel() {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -64,7 +68,6 @@ public class vBooking extends javax.swing.JFrame {
         
         setTitle("Gestor de Reservas");
 
-        
         BookingsTable.addKeyListener(new KeyAdapter() {
         @Override
             public void keyPressed(KeyEvent e) {
@@ -90,6 +93,7 @@ public class vBooking extends javax.swing.JFrame {
         this.cleanInputs();
     }  
     
+    //Gestiona las reservas insertandolas en sus respectivas mesas
     private void handleBookings() {
         dummyTableList = new ArrayList<Table>();
                 
@@ -170,6 +174,7 @@ public class vBooking extends javax.swing.JFrame {
         return 0;
     }
     
+    //Genera las mesas
     private void insertTablesIntoDummyList() {
         this.dummyTableList.add(new Table(2, 1));
         this.dummyTableList.add(new Table(2, 2));
@@ -194,6 +199,8 @@ public class vBooking extends javax.swing.JFrame {
         this.selectedReserva = new Booking();    
     }
     
+    
+    //Consulta las reservas en la bdd y las mete dentro de listaReservas
     public void updateTable() {    
         while(model.getRowCount()>0) {
             model.removeRow(0);
@@ -213,6 +220,7 @@ public class vBooking extends javax.swing.JFrame {
         BookingsTable.setModel(model);       
     }
     
+    //Crea el modelo para la tabla
     public void createTableModel() {
         model.addColumn("ID");
         model.addColumn("Nombre");
@@ -582,7 +590,8 @@ public class vBooking extends javax.swing.JFrame {
     private void BookingsTableFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_BookingsTableFocusGained
         
     }//GEN-LAST:event_BookingsTableFocusGained
-
+    
+    //Abre la vista de vTimeline
     private void openTimelineButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openTimelineButtonActionPerformed
         vTimeline timeline = new vTimeline();
         timeline.setVisible(true);

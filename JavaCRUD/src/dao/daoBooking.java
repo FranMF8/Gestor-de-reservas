@@ -104,7 +104,7 @@ public class daoBooking {
             return false;
         }
     }
-    
+    //Consulta la BDD
     public ArrayList<Booking> consultBookings() {
         ArrayList<Booking> lista = new ArrayList<Booking>();
         
@@ -130,6 +130,7 @@ public class daoBooking {
             e.printStackTrace();
         }
         con.Disconnect();
+        //Devuelve la Lista con las reservas
         return lista;
     }
     
