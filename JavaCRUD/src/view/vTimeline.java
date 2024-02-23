@@ -30,7 +30,7 @@ public class vTimeline extends javax.swing.JFrame {
     private daoBooking dao;
     BookingHandler gestorReservas;
     
-       
+    //Inicializa los objetos
     public vTimeline() {
         initComponents();    
         
